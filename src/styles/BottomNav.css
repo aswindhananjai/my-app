@@ -4,11 +4,12 @@
   left: 0;
   right: 0;
   background: white;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border-light);
   display: flex;
   justify-content: space-around;
   padding: 8px 0 env(safe-area-inset-bottom, 8px);
   z-index: 100;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .nav-item {

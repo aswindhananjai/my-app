@@ -100,19 +100,14 @@ export default function Timeline() {
         {/* Relationship Stats Card */}
         <div className="stats-card">
           <div className="stats-content">
-            <div className="heart-icon-large">💕</div>
             <div className="stats-info">
               <h2 className="partner-greeting">{partnerName} & You</h2>
               <div className="days-display">
                 <div className="days-number">{calculateDaysTogether()}</div>
                 <span className="days-unit">days</span>
               </div>
-              <p className="days-label">together forever</p>
+              <p className="days-label">together</p>
             </div>
-          </div>
-          <div className="stats-decoration">
-            <div className="decoration-circle"></div>
-            <div className="decoration-circle"></div>
           </div>
         </div>
       </header>

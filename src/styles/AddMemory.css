@@ -84,6 +84,29 @@
   color: var(--color-text-muted);
 }
 
+/* Existing image preview in edit mode */
+.existing-image-preview {
+  margin-bottom: 10px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid var(--color-border-light);
+}
+
+.existing-image-preview img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.existing-image-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 6px 12px;
+  background: var(--color-background-light);
+}
+
 /* Photos Grid */
 .photos-grid {
   display: flex;

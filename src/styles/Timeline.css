@@ -164,20 +164,17 @@
   object-fit: cover;
 }
 
-/* Default background when no image */
+/* Default background when no image — category color with scattered emoji pattern */
 .memory-card-default-bg {
   position: absolute;
   inset: 0;
-  background: var(--gradient-hero);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  display: block;
 }
 
-.memory-card-default-emoji {
-  font-size: 52px;
-  opacity: 0.55;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+/* Lighter overlay on no-image cards so emoji shows through */
+.big-memory-card.no-image .memory-gradient-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.45) 100%);
 }
 
 .memory-gradient-overlay {
@@ -188,29 +185,19 @@
 
 .memory-category-badge {
   position: absolute;
-  top: 13px;
-  left: 13px;
+  top: 14px;
+  left: 14px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 11px;
-  font-weight: var(--font-weight-bold);
-  background: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a2e;
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(6px);
   border-radius: 999px;
-  padding: 5px 11px;
-}
-
-.memory-category-badge.trip {
-  color: #1B4FA8;
-}
-
-.memory-category-badge.date {
-  color: #C2487A;
-}
-
-.memory-category-badge svg {
-  width: 12px;
-  height: 12px;
+  padding: 5px 12px 5px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .memory-card-content {
@@ -230,8 +217,8 @@
 .memory-card-meta {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  opacity: 0.85;
-  margin-top: 3px;
+  opacity: 0.9;
+  margin-top: 4px;
 }
 
 /* Bottom navigation - 3-item layout */

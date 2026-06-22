@@ -95,7 +95,7 @@ export default function Timeline() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
   if (loading) {
@@ -170,24 +170,37 @@ export default function Timeline() {
                 {memory.image_url
                   ? <img src={memory.image_url} alt={memory.title} />
                   : (
-                    <div className="memory-card-default-bg">
-                      <span className="memory-card-default-emoji">{category.emoji}</span>
+                    <div
+                      className="memory-card-default-bg"
+                      style={{ background: `linear-gradient(145deg, ${category.color} 0%, ${category.color}dd 100%)` }}
+                    >
+                      {/* Scattered emoji pattern — dense, varied sizes & rotations */}
+                      <span style={{ position:'absolute', fontSize:'78px', top:'-14px',  right:'-10px', opacity:0.14, transform:'rotate(20deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'46px', top:'14px',   left:'8%',     opacity:0.18, transform:'rotate(-14deg)', lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'30px', top:'50%',    left:'38%',    opacity:0.16, transform:'translateY(-50%) rotate(6deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'20px', top:'8px',    right:'28%',   opacity:0.2,  transform:'rotate(-22deg)', lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'55px', bottom:'-10px',left:'48%',  opacity:0.12, transform:'rotate(-8deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'24px', bottom:'18px', left:'6%',   opacity:0.2,  transform:'rotate(16deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'36px', top:'40%',    right:'5%',   opacity:0.14, transform:'rotate(-18deg)', lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'18px', bottom:'30px', right:'42%', opacity:0.22, transform:'rotate(10deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'42px', top:'-8px',   left:'55%',   opacity:0.12, transform:'rotate(-5deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'16px', top:'45%',    left:'22%',   opacity:0.18, transform:'rotate(25deg)',  lineHeight:1 }}>{category.emoji}</span>
+                      <span style={{ position:'absolute', fontSize:'26px', bottom:'5px', right:'8%',   opacity:0.15, transform:'rotate(-12deg)', lineHeight:1 }}>{category.emoji}</span>
                     </div>
                   )
                 }
                 <div className="memory-gradient-overlay"></div>
-                <span className={`memory-category-badge ${category.id}`}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    {category.id === 'trip' && <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />}
-                    {category.id === 'date' && <path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" />}
-                    {category.id === 'milestone' && <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z M4 22v-7" />}
-                    {category.id === 'celebration' && <path d="M8 2v4 M16 2v4 M3 10h18 M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />}
-                  </svg>
+                {/* Category badge — white pill like design */}
+                <span className="memory-category-badge">
+                  <span style={{ fontSize: '12px', lineHeight: 1 }}>{category.emoji}</span>
                   {category.name}
                 </span>
                 <div className="memory-card-content">
                   <div className="memory-card-title">{memory.title}</div>
-                  <div className="memory-card-meta">{formatDate(memory.date)}</div>
+                  <div className="memory-card-meta">
+                    {formatDate(memory.date)}
+                    {memory.created_by && <span> · added by {memory.created_by}</span>}
+                  </div>
                 </div>
               </div>
             );

@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import { uploadImage } from '../utils/cloudinary';
 import { getCurrentUser } from '../utils/auth';
@@ -8,8 +8,13 @@ import '../styles/AddMemory.css';
 
 export default function AddMemory() {
   const navigate = useNavigate();
+  const { id } = useParams(); // present when editing
+  const isEditMode = Boolean(id);
+
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(isEditMode);
   const [images, setImages] = useState([]);
+  const [existingImageUrl, setExistingImageUrl] = useState(null);
   const [dragIndex, setDragIndex] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const fileInputRef = useRef(null);
@@ -20,6 +25,35 @@ export default function AddMemory() {
     description: '',
     location: '',
   });
+
+  // Load existing memory when editing
+  useEffect(() => {
+    if (!isEditMode) return;
+    const loadMemory = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (error) throw error;
+        setFormData({
+          category: data.category || 'first',
+          title: data.title || '',
+          date: data.date || new Date().toISOString().split('T')[0],
+          description: data.description || '',
+          location: data.location || '',
+        });
+        if (data.image_url) setExistingImageUrl(data.image_url);
+      } catch (err) {
+        console.error('Failed to load memory:', err);
+        navigate('/');
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    loadMemory();
+  }, [id]);
 
   const handleImageAdd = (e) => {
     const files = Array.from(e.target.files || []);
@@ -41,7 +75,6 @@ export default function AddMemory() {
       reader.readAsDataURL(file);
     });
 
-    // Reset input so same file can be re-added if removed
     e.target.value = '';
   };
 
@@ -104,10 +137,7 @@ export default function AddMemory() {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleCategoryChange = (categoryId) => {
@@ -125,10 +155,10 @@ export default function AddMemory() {
     setLoading(true);
 
     try {
-      let imageUrl = null;
+      let imageUrl = existingImageUrl; // keep existing image by default
       let imageUploadWarning = false;
 
-      // Try to upload first image to Cloudinary — non-blocking
+      // Try to upload new image if added
       if (images.length > 0) {
         try {
           imageUrl = await uploadImage(images[0].file);
@@ -138,24 +168,36 @@ export default function AddMemory() {
         }
       }
 
-      // Save memory to Supabase with current user
       const currentUser = getCurrentUser();
-      const { error } = await supabase.from('memories').insert([
-        {
+
+      if (isEditMode) {
+        // Update existing memory
+        const { error } = await supabase
+          .from('memories')
+          .update({
+            ...formData,
+            image_url: imageUrl,
+            updated_by: currentUser,
+          })
+          .eq('id', id);
+        if (error) throw error;
+      } else {
+        // Insert new memory
+        const { error } = await supabase.from('memories').insert([{
           ...formData,
           image_url: imageUrl,
           created_by: currentUser,
           updated_by: currentUser,
-        },
-      ]);
-
-      if (error) throw error;
+        }]);
+        if (error) throw error;
+      }
 
       if (imageUploadWarning) {
         alert('Memory saved! Note: The photo could not be uploaded — check your Cloudinary cloud name and upload preset in .env');
       }
 
-      navigate('/');
+      // Go back to where we came from
+      navigate(isEditMode ? `/memory/${id}` : '/');
     } catch (error) {
       console.error('Error saving memory:', error);
       alert(`Failed to save memory: ${error.message || 'Please try again.'}`);
@@ -163,6 +205,14 @@ export default function AddMemory() {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="add-memory-page">
@@ -174,7 +224,7 @@ export default function AddMemory() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="add-memory-title">New memory</h1>
+          <h1 className="add-memory-title">{isEditMode ? 'Edit memory' : 'New memory'}</h1>
         </div>
 
         <form className="add-memory-form" onSubmit={handleSubmit}>
@@ -186,6 +236,15 @@ export default function AddMemory() {
               </div>
               <div className="photo-count">{images.length} of 5</div>
             </div>
+
+            {/* Show existing image in edit mode */}
+            {isEditMode && existingImageUrl && images.length === 0 && (
+              <div className="existing-image-preview">
+                <img src={existingImageUrl} alt="Current" />
+                <p className="existing-image-label">Current photo — add new photo below to replace</p>
+              </div>
+            )}
+
             <div className="photos-grid">
               {/* Plus button always first */}
               {images.length < 5 && (
@@ -335,7 +394,7 @@ export default function AddMemory() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#fff" />
           </svg>
-          {loading ? 'Saving...' : 'Save memory'}
+          {loading ? 'Saving...' : (isEditMode ? 'Update memory' : 'Save memory')}
         </button>
       </div>
     </div>

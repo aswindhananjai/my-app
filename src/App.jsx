@@ -98,6 +98,14 @@ function AppContent() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/edit/:id"
+        element={
+          <ProtectedRoute>
+            <AddMemory />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

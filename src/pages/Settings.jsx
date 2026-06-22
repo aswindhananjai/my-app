@@ -26,19 +26,6 @@ export default function Settings() {
             <h3>Logged in as</h3>
             <p className="current-user">{currentUser}</p>
           </div>
-
-          <div className="info-card">
-            <h3>Relationship</h3>
-            <p>Aswin & Anu</p>
-            <p className="info-detail">Since May 21, 2026</p>
-          </div>
-
-          <div className="info-card">
-            <h3>Your Passcode</h3>
-            <p className="info-detail">
-              {currentUser === 'Aswin' ? '140297' : '010195'}
-            </p>
-          </div>
         </div>
 
         <div className="settings-actions">

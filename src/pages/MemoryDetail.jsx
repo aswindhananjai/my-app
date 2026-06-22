@@ -106,7 +106,12 @@ export default function MemoryDetail() {
 
           <h1 className="detail-title">{memory.title}</h1>
 
-          <p className="detail-date">{formatDate(memory.date)}</p>
+          <div className="detail-meta">
+            <p className="detail-date">{formatDate(memory.date)}</p>
+            {memory.created_by && (
+              <span className="detail-author">• Added by {memory.created_by}</span>
+            )}
+          </div>
 
           {memory.location && (
             <div className="detail-location">

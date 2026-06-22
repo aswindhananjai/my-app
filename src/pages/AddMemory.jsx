@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import { uploadImage } from '../utils/cloudinary';
+import { getCurrentUser } from '../utils/auth';
 import { MEMORY_CATEGORIES } from '../utils/constants';
 import '../styles/AddMemory.css';
 
@@ -55,11 +56,14 @@ export default function AddMemory() {
         imageUrl = await uploadImage(imageFile);
       }
 
-      // Save memory to Supabase
+      // Save memory to Supabase with current user
+      const currentUser = getCurrentUser();
       const { error } = await supabase.from('memories').insert([
         {
           ...formData,
           image_url: imageUrl,
+          created_by: currentUser,
+          updated_by: currentUser,
         },
       ]);
 

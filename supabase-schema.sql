@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS memories (
   category TEXT NOT NULL CHECK (category IN ('first', 'milestone', 'trip', 'gift', 'moment', 'quote', 'celebration', 'special_day')),
   location TEXT,
   image_url TEXT,
+  created_by TEXT DEFAULT 'Aswin',
+  updated_by TEXT DEFAULT 'Aswin',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );

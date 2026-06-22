@@ -77,8 +77,24 @@ export default function Timeline() {
     <div className="timeline-page">
       {/* Header */}
       <header className="timeline-header">
-        <h1 className="relationship-names">Aswin & Anu</h1>
-        <p className="days-together">{calculateDaysTogether()} Days Together</p>
+        <div className="header-content">
+          <div className="header-icon">💕</div>
+          <div className="header-text">
+            <div className="names-container">
+              <span className="name">Aswin</span>
+              <span className="ampersand">&</span>
+              <span className="name">Anu</span>
+            </div>
+            <div className="days-container">
+              <div className="days-number">{calculateDaysTogether()}</div>
+              <div className="days-label">days of us</div>
+            </div>
+          </div>
+          <div className="header-decoration">
+            <div className="heart-small">♥</div>
+            <div className="heart-small delay">♥</div>
+          </div>
+        </div>
       </header>
 
       {/* Timeline */}
@@ -115,7 +131,12 @@ export default function Timeline() {
                           {category.emoji} {category.label}
                         </div>
                         <h3 className="memory-title">{memory.title}</h3>
-                        <p className="memory-date">{formatDate(memory.date)}</p>
+                        <div className="memory-meta">
+                          <p className="memory-date">{formatDate(memory.date)}</p>
+                          {memory.created_by && (
+                            <span className="memory-author">• Added by {memory.created_by}</span>
+                          )}
+                        </div>
                         {memory.description && (
                           <p className="memory-description">
                             {memory.description.length > 120

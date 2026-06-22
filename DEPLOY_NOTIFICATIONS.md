@@ -2,19 +2,22 @@
 
 Great news! FCM tokens are now being saved successfully. Here are the final steps to enable push notifications:
 
-## Step 1: Get Firebase Server Key
+## Step 1: Get Firebase Service Account Key
 
-1. Go to [Firebase Console](https://console.firebase.google.com/project/just-us-53056/settings/cloudmessaging)
-2. Scroll to "Cloud Messaging API (Legacy)"
-3. Copy the **Server key** (starts with `AAAAxxx...`)
+1. Go to [Firebase Console > Project Settings > Service Accounts](https://console.firebase.google.com/project/just-us-53056/settings/serviceaccounts/adminsdk)
+2. Click "Generate new private key"
+3. Download the JSON file (e.g., `just-us-53056-firebase-adminsdk-xxxxx.json`)
+4. **Important**: Keep this file secure - it contains private credentials
 
-## Step 2: Add Server Key to Supabase
+## Step 2: Add Service Account to Supabase
 
-1. Go to [Supabase Dashboard > Edge Functions](https://supabase.com/dashboard/project/uaahpmiitvoycuwsdsws/functions)
-2. Click on "Manage secrets"
-3. Add a new secret:
-   - Name: `FIREBASE_SERVER_KEY`
-   - Value: (paste the server key from step 1)
+1. Open the downloaded JSON file
+2. Copy the **entire JSON content** (it should start with `{` and end with `}`)
+3. Go to [Supabase Dashboard > Project Settings > Edge Functions](https://supabase.com/dashboard/project/uaahpmiitvoycuwsdsws/settings/functions)
+4. Scroll to "Secrets" section
+5. Add a new secret:
+   - Name: `FIREBASE_SERVICE_ACCOUNT`
+   - Value: (paste the entire JSON content from step 2)
 
 ## Step 3: Deploy the Edge Function
 
@@ -47,9 +50,9 @@ Check the logs in Supabase Dashboard:
 ✅ FCM tokens are being generated and saved
 ✅ Service worker is registered
 ✅ Permission granted
-✅ Edge function created (needs deployment)
+✅ Edge function created using FCM V1 API
 ⏳ Waiting for edge function deployment
-⏳ Waiting for Firebase Server Key configuration
+⏳ Waiting for Firebase Service Account configuration
 
 ---
 

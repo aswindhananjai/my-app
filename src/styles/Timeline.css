@@ -2,8 +2,11 @@
 
 .timeline-page {
   min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   background: #fff;
   padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
 }
 
 /* Gradient Hero */

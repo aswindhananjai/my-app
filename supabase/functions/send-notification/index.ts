@@ -1,48 +1,52 @@
-// Supabase Edge Function to send FCM push notifications
-// This function is called when a memory is added to send notification to the partner
-
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const FIREBASE_SERVER_KEY = Deno.env.get('FIREBASE_SERVER_KEY') || '';
-const FCM_SEND_URL = 'https://fcm.googleapis.com/fcm/send';
 
-interface NotificationRequest {
+interface NotificationPayload {
   token: string;
   title: string;
   body: string;
+  data?: Record<string, string>;
 }
 
 serve(async (req) => {
-  // CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  };
-
-  // Handle CORS preflight
+  // Handle CORS
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+    return new Response('ok', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+      }
+    })
   }
 
   try {
-    const { token, title, body }: NotificationRequest = await req.json();
+    const { token, title, body, data }: NotificationPayload = await req.json();
 
-    if (!token || !title || !body) {
+    if (!token) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: token, title, body' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'FCM token is required' }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        }
       );
     }
 
     if (!FIREBASE_SERVER_KEY) {
+      console.error('FIREBASE_SERVER_KEY not configured');
       return new Response(
-        JSON.stringify({ error: 'Firebase server key not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Server configuration error' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        }
       );
     }
 
-    // Send FCM notification
-    const fcmResponse = await fetch(FCM_SEND_URL, {
+    // Send notification via FCM Legacy API
+    const fcmResponse = await fetch('https://fcm.googleapis.com/fcm/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,16 +55,13 @@ serve(async (req) => {
       body: JSON.stringify({
         to: token,
         notification: {
-          title: title,
-          body: body,
+          title: title || 'New Memory',
+          body: body || 'A new memory was added',
           icon: '/favicon.ico',
           badge: '/favicon.ico',
-          tag: 'memory-notification',
-          requireInteraction: false,
+          click_action: 'https://just-us-seven-theta.vercel.app/',
         },
-        data: {
-          click_action: '/',
-        },
+        data: data || {},
         priority: 'high',
       }),
     });
@@ -71,19 +72,31 @@ serve(async (req) => {
       console.error('FCM Error:', fcmData);
       return new Response(
         JSON.stringify({ error: 'Failed to send notification', details: fcmData }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: fcmResponse.status,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        }
       );
     }
 
+    console.log('Notification sent successfully:', fcmData);
+
     return new Response(
-      JSON.stringify({ success: true, data: fcmData }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ success: true, response: fcmData }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      }
     );
+
   } catch (error) {
     console.error('Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: error.message }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      }
     );
   }
-});
+})

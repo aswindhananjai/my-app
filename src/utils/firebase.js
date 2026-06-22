@@ -2,14 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 // Firebase configuration
-// Replace these with your actual Firebase config values from Firebase Console
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_AUTH_DOMAIN",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_STORAGE_BUCKET",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_MESSAGING_SENDER_ID",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyA8e3lUkkoyfp42HIwxLX9IgKGqmOacxl0",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "just-us-53056.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "just-us-53056",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "just-us-53056.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "247025722834",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:247025722834:web:e534ff23c1d58e05cd140b"
 };
 
 // Initialize Firebase

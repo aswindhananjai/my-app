@@ -1,12 +1,10 @@
 export const MEMORY_CATEGORIES = [
-  { id: 'first', emoji: '❤️', label: 'First' },
-  { id: 'milestone', emoji: '📍', label: 'Milestone' },
-  { id: 'trip', emoji: '✈️', label: 'Trip' },
-  { id: 'gift', emoji: '🎁', label: 'Gift' },
-  { id: 'moment', emoji: '📷', label: 'Moment' },
-  { id: 'quote', emoji: '💬', label: 'Quote' },
-  { id: 'celebration', emoji: '🎉', label: 'Celebration' },
-  { id: 'special_day', emoji: '🌟', label: 'Special Day' },
+  { id: 'first', emoji: '❤️', name: 'First', label: 'First' },
+  { id: 'trip', emoji: '✈️', name: 'Trip', label: 'Trip' },
+  { id: 'gift', emoji: '🎁', name: 'Gift', label: 'Gift' },
+  { id: 'moment', emoji: '📷', name: 'Moment', label: 'Moment' },
+  { id: 'celebration', emoji: '🎉', name: 'Celebration', label: 'Celebration' },
+  { id: 'special_day', emoji: '🌟', name: 'Special Day', label: 'Special Day' },
 ];
 
 export const COLORS = {

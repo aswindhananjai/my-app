@@ -30,13 +30,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.15s ease;
   -webkit-tap-highlight-color: transparent;
   flex-shrink: 0;
 }
 
 .back-button-rounded:active {
-  transform: scale(0.95);
+  background: var(--color-hover);
 }
 
 .add-memory-title {
@@ -90,21 +90,70 @@
   gap: 10px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
 }
 
+/* Plus button - always first */
+.photo-add {
+  flex-shrink: 0;
+  width: 100px;
+  height: 104px;
+  border-radius: 18px;
+  border: 2px dashed var(--color-border-lighter);
+  background: #F8FAFE;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.photo-add:active {
+  background: var(--color-hover);
+}
+
+.photo-add svg {
+  color: var(--color-primary);
+}
+
+.photo-add span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Photo Items */
 .photo-item {
   position: relative;
-  flex: 1;
-  min-width: 100px;
+  flex-shrink: 0;
+  width: 100px;
   height: 104px;
   border-radius: 18px;
   overflow: hidden;
+  cursor: grab;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  user-select: none;
+}
+
+.photo-item.dragging {
+  opacity: 0.45;
+  transform: scale(0.96);
+  cursor: grabbing;
+}
+
+.photo-item.drag-over {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .photo-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
 }
 
 .photo-remove {
@@ -121,35 +170,30 @@
   justify-content: center;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  z-index: 2;
 }
 
-.photo-add {
-  flex: 1;
-  min-width: 100px;
-  height: 104px;
-  border-radius: 18px;
-  border: 2px dashed var(--color-border-lighter);
-  background: #F8FAFE;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+.drag-hint {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  pointer-events: none;
+  line-height: 1;
 }
 
-.photo-add svg {
-  color: var(--color-primary);
+.drag-hint-text {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-top: 8px;
+  text-align: center;
 }
 
-.photo-add span {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
-/* Category Pills */
+/* Category Pills - NO flicker, just clean static color change */
 .category-pills {
   display: flex;
   flex-wrap: wrap;
@@ -164,26 +208,29 @@
   font-weight: 700;
   border-radius: 999px;
   padding: 9px 15px;
-  border: none;
+  border: 1.5px solid var(--color-border-light);
   cursor: pointer;
-  transition: all 0.2s ease;
+  /* No transition on color/background to avoid flicker */
+  background: var(--color-background-light);
+  color: #5B6B85;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .category-pill.selected {
   color: #fff;
   background: var(--gradient-button);
-  box-shadow: 0 6px 14px rgba(45, 111, 224, 0.3);
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(45, 111, 224, 0.28);
 }
 
-.category-pill:not(.selected) {
-  color: #5B6B85;
-  background: var(--color-background-light);
-  border: 1px solid var(--color-border-light);
+.pill-emoji {
+  font-size: 14px;
+  line-height: 1;
 }
 
-.category-pill:not(.selected):active {
-  transform: scale(0.95);
+.pill-label {
+  line-height: 1;
 }
 
 /* Input Fields */
@@ -200,7 +247,10 @@ textarea {
   color: var(--color-text-primary);
   font-family: var(--font-family);
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  /* Remove inner appearance */
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type="text"]:focus,
@@ -221,7 +271,7 @@ textarea {
   resize: vertical;
 }
 
-/* Input with Icon */
+/* Input with Icon - outer wrapper is the visual box */
 .input-with-icon {
   display: flex;
   align-items: center;
@@ -230,7 +280,7 @@ textarea {
   border: 1.5px solid var(--color-border-light);
   border-radius: 16px;
   padding: 14px 14px;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-with-icon svg {
@@ -238,18 +288,27 @@ textarea {
   color: var(--color-primary);
 }
 
-.input-with-icon input {
+/* The input inside input-with-icon has NO border, NO background, NO inner rounded rect */
+.input-with-icon input[type="text"],
+.input-with-icon input[type="date"] {
   flex: 1;
-  border: none;
-  background: transparent;
-  padding: 0;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
   font-size: 14.5px;
   font-weight: 600;
   color: var(--color-text-primary);
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
 }
 
 .input-with-icon input::placeholder {
   color: var(--color-text-muted);
+  font-weight: 500;
 }
 
 .input-with-icon:focus-within {
@@ -283,12 +342,12 @@ textarea {
   font-weight: 800;
   box-shadow: 0 12px 26px rgba(45, 111, 224, 0.4);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .save-btn:active:not(:disabled) {
-  transform: scale(0.98);
+  opacity: 0.88;
 }
 
 .save-btn:disabled {

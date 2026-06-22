@@ -164,10 +164,17 @@ export default function Timeline() {
             return (
               <div
                 key={memory.id}
-                className="big-memory-card"
+                className={`big-memory-card ${!memory.image_url ? 'no-image' : ''}`}
                 onClick={() => navigate(`/memory/${memory.id}`)}
               >
-                {memory.image_url && <img src={memory.image_url} alt={memory.title} />}
+                {memory.image_url
+                  ? <img src={memory.image_url} alt={memory.title} />
+                  : (
+                    <div className="memory-card-default-bg">
+                      <span className="memory-card-default-emoji">{category.emoji}</span>
+                    </div>
+                  )
+                }
                 <div className="memory-gradient-overlay"></div>
                 <span className={`memory-category-badge ${category.id}`}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -188,7 +195,7 @@ export default function Timeline() {
         )}
       </div>
 
-      {/* Bottom navigation */}
+      {/* Bottom navigation - always 3 items: Memories | + | Settings */}
       <div className="bottom-nav-timeline">
         <button className="nav-item-timeline active" onClick={() => navigate('/')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -199,6 +206,14 @@ export default function Timeline() {
           </svg>
           <span>Memories</span>
         </button>
+
+        {/* Center FAB */}
+        <button className="nav-fab" onClick={() => navigate('/add')}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 5v14 M5 12h14" />
+          </svg>
+        </button>
+
         <button className="nav-item-timeline inactive" onClick={() => navigate('/settings')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
@@ -206,13 +221,6 @@ export default function Timeline() {
           <span>Settings</span>
         </button>
       </div>
-
-      {/* Floating action button */}
-      <button className="fab-timeline" onClick={() => navigate('/add')}>
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 5v14 M5 12h14" />
-        </svg>
-      </button>
     </div>
   );
 }

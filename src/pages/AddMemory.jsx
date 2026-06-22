@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import { uploadImage } from '../utils/cloudinary';
@@ -10,8 +10,11 @@ export default function AddMemory() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
+  const [dragIndex, setDragIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
-    category: 'date',
+    category: 'first',
     title: '',
     date: new Date().toISOString().split('T')[0],
     description: '',
@@ -19,28 +22,85 @@ export default function AddMemory() {
   });
 
   const handleImageAdd = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
 
-    if (images.length >= 5) {
+    const remaining = 5 - images.length;
+    if (remaining <= 0) {
       alert('Maximum 5 photos allowed');
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
-      return;
-    }
+    const validFiles = files.filter(f => f.type.startsWith('image/')).slice(0, remaining);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImages([...images, { file, preview: reader.result }]);
-    };
-    reader.readAsDataURL(file);
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImages(prev => [...prev, { file, preview: reader.result, id: Date.now() + Math.random() }]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset input so same file can be re-added if removed
+    e.target.value = '';
   };
 
   const handleImageRemove = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Drag-to-reorder handlers
+  const handleDragStart = (e, index) => {
+    setDragIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    if (dragIndex === null || dragIndex === index) {
+      setDragIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+    const reordered = [...images];
+    const [moved] = reordered.splice(dragIndex, 1);
+    reordered.splice(index, 0, moved);
+    setImages(reordered);
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+
+  // Long-press touch support for reordering
+  const touchStartRef = useRef(null);
+  const longPressTimer = useRef(null);
+  const [draggingTouch, setDraggingTouch] = useState(false);
+
+  const handleTouchStart = (e, index) => {
+    touchStartRef.current = { index, startY: e.touches[0].clientY };
+    longPressTimer.current = setTimeout(() => {
+      setDragIndex(index);
+      setDraggingTouch(true);
+    }, 400);
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(longPressTimer.current);
+    if (draggingTouch) {
+      setDraggingTouch(false);
+      setDragIndex(null);
+      setDragOverIndex(null);
+    }
   };
 
   const handleChange = (e) => {
@@ -66,10 +126,16 @@ export default function AddMemory() {
 
     try {
       let imageUrl = null;
+      let imageUploadWarning = false;
 
-      // Upload first image to Cloudinary if available
+      // Try to upload first image to Cloudinary — non-blocking
       if (images.length > 0) {
-        imageUrl = await uploadImage(images[0].file);
+        try {
+          imageUrl = await uploadImage(images[0].file);
+        } catch (uploadError) {
+          console.error('Image upload failed, saving without image:', uploadError);
+          imageUploadWarning = true;
+        }
       }
 
       // Save memory to Supabase with current user
@@ -85,10 +151,14 @@ export default function AddMemory() {
 
       if (error) throw error;
 
+      if (imageUploadWarning) {
+        alert('Memory saved! Note: The photo could not be uploaded — check your Cloudinary cloud name and upload preset in .env');
+      }
+
       navigate('/');
     } catch (error) {
       console.error('Error saving memory:', error);
-      alert('Failed to save memory. Please try again.');
+      alert(`Failed to save memory: ${error.message || 'Please try again.'}`);
     } finally {
       setLoading(false);
     }
@@ -117,8 +187,38 @@ export default function AddMemory() {
               <div className="photo-count">{images.length} of 5</div>
             </div>
             <div className="photos-grid">
+              {/* Plus button always first */}
+              {images.length < 5 && (
+                <label className="photo-add" htmlFor="photo-input">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  <span>Add</span>
+                  <input
+                    id="photo-input"
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageAdd}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              )}
+
+              {/* Uploaded images to the right */}
               {images.map((image, index) => (
-                <div key={index} className="photo-item">
+                <div
+                  key={image.id || index}
+                  className={`photo-item ${dragIndex === index ? 'dragging' : ''} ${dragOverIndex === index ? 'drag-over' : ''}`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onDragEnd={handleDragEnd}
+                  onTouchStart={(e) => handleTouchStart(e, index)}
+                  onTouchEnd={handleTouchEnd}
+                >
                   <img src={image.preview} alt={`Upload ${index + 1}`} />
                   <button
                     type="button"
@@ -129,26 +229,18 @@ export default function AddMemory() {
                       <path d="M6 6l12 12M18 6 6 18" />
                     </svg>
                   </button>
+                  {images.length > 1 && (
+                    <div className="drag-hint">⠿</div>
+                  )}
                 </div>
               ))}
-              {images.length < 5 && (
-                <label className="photo-add">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                  <span>Add</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageAdd}
-                    style={{ display: 'none' }}
-                  />
-                </label>
-              )}
             </div>
+            {images.length > 1 && (
+              <p className="drag-hint-text">Long press to reorder photos</p>
+            )}
           </div>
 
-          {/* Memory Type */}
+          {/* Memory Type - Pills with labels, no flicker */}
           <div className="form-section">
             <div className="form-label">Memory type</div>
             <div className="category-pills">
@@ -156,10 +248,11 @@ export default function AddMemory() {
                 <button
                   key={cat.id}
                   type="button"
-                  className={`category-pill ${formData.category === cat.id ? 'selected' : ''}`}
+                  className={`category-pill${formData.category === cat.id ? ' selected' : ''}`}
                   onClick={() => handleCategoryChange(cat.id)}
                 >
-                  {cat.emoji} {cat.name}
+                  <span className="pill-emoji">{cat.emoji}</span>
+                  <span className="pill-label">{cat.name}</span>
                 </button>
               ))}
             </div>

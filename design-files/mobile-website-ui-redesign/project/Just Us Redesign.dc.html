@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+</style>
+</helmet>
+
+<div style="width:max-content;min-width:100%;min-height:100vh;box-sizing:border-box;padding:48px;background:#e7e5df;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+
+  <!-- ===================== INTRO / RATIONALE ===================== -->
+  <div style="max-width:780px;background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.10);padding:38px 42px;margin-bottom:54px;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+      <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(45,111,224,.32);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#fff"></path></svg>
+      </div>
+      <div>
+        <div style="font-size:21px;font-weight:800;color:#14233B;font-family:'Fredoka',sans-serif;letter-spacing:.01em;">Just&nbsp;us — Immersive Duo</div>
+        <div style="font-size:13px;font-weight:600;color:#6B7A93;">Final system · white &amp; blue · the full app flow</div>
+      </div>
+    </div>
+    <p style="font-size:14.5px;line-height:1.65;color:#37475F;margin:0 0 16px;max-width:680px;">
+      Locked to the <b>Immersive Duo</b> direction. The home opens straight into a bold blue hero — both of you front-and-centre with the days-together counter — and a photo-forward memory feed below. Here's the complete flow: lock, home, all-memories, detail, new memory and settings, with every tweak you asked for applied.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+      <div style="font-size:12px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:999px;padding:6px 13px;">Cleaner hero — no chrome</div>
+      <div style="font-size:12px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:999px;padding:6px 13px;">Up to 5 photos</div>
+      <div style="font-size:12px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:999px;padding:6px 13px;">New: All memories + filters</div>
+      <div style="font-size:12px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:999px;padding:6px 13px;">Nav → Memories</div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION: APP SCREENS ===================== -->
+  <div style="font-size:13px;font-weight:800;color:#43536E;letter-spacing:.04em;text-transform:uppercase;margin-bottom:18px;">The app — full flow</div>
+  <div style="display:flex;gap:48px;align-items:flex-start;">
+
+    <!-- ---------- LOCK ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">Passcode lock</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="Lock" style="position:relative;height:100%;background:radial-gradient(120% 60% at 50% 0%,#EAF1FC 0%,#FFFFFF 55%);color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 38px;">
+          <div style="width:88px;height:88px;border-radius:25px;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 34px rgba(45,111,224,.4);">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#fff"></path></svg>
+          </div>
+          <div style="font-size:15px;color:#6B7A93;font-weight:600;margin-top:30px;">Enter your passcode</div>
+          <div style="display:flex;gap:16px;margin:24px 0 8px;">
+            <div style="width:15px;height:15px;border-radius:50%;background:#2D6FE0;"></div>
+            <div style="width:15px;height:15px;border-radius:50%;background:#2D6FE0;"></div>
+            <div style="width:15px;height:15px;border-radius:50%;background:#2D6FE0;"></div>
+            <div style="width:15px;height:15px;border-radius:50%;background:#2D6FE0;"></div>
+            <div style="width:15px;height:15px;border-radius:50%;border:2px solid #C7D6EE;"></div>
+            <div style="width:15px;height:15px;border-radius:50%;border:2px solid #C7D6EE;"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,72px);gap:18px;margin-top:38px;">
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">1</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">2</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">3</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">4</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">5</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">6</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">7</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">8</div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">9</div>
+            <div></div>
+            <div style="height:72px;border-radius:50%;background:#fff;border:1px solid #EAF1FC;box-shadow:0 4px 12px rgba(20,35,59,.05);display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:600;font-family:'Fredoka',sans-serif;color:#14233B;">0</div>
+            <div style="height:72px;display:flex;align-items:center;justify-content:center;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9AA7BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H8.5L3 12l5.5 7H21a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"></path><path d="m12 9 5 6m0-6-5 6"></path></svg>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- ---------- HOME: IMMERSIVE DUO ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">Home</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="Home" style="position:relative;height:100%;background:#fff;color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+          <div style="height:100%;overflow:auto;padding:0 0 104px;">
+            <!-- gradient hero (no chrome) -->
+            <div style="position:relative;overflow:hidden;background:linear-gradient(165deg,#3B82F6 0%,#2D6FE0 45%,#1B4FA8 100%);padding:34px 22px 60px;border-radius:0 0 36px 36px;color:#fff;">
+              <svg style="position:absolute;top:36px;right:26px;opacity:.18;animation:floatY 5s ease-in-out infinite;" width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z"></path></svg>
+              <svg style="position:absolute;top:130px;left:20px;opacity:.13;animation:floatY 6.5s ease-in-out infinite;" width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z"></path></svg>
+              <!-- duo photos -->
+              <div style="display:flex;align-items:center;justify-content:center;margin:4px 0 6px;">
+                <div style="width:108px;height:132px;border-radius:24px;overflow:hidden;transform:rotate(-5deg);border:4px solid rgba(255,255,255,.85);box-shadow:0 14px 30px rgba(0,0,0,.28);">
+                  <img src="assets/anu.png" alt="Anu" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="z-index:3;margin:0 -16px;width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(0,0,0,.25);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#FF7A93"></path></svg>
+                </div>
+                <div style="width:108px;height:132px;border-radius:24px;overflow:hidden;transform:rotate(5deg);border:4px solid rgba(255,255,255,.85);box-shadow:0 14px 30px rgba(0,0,0,.28);">
+                  <img src="assets/aswin.png" alt="Aswin" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+              </div>
+              <!-- counter -->
+              <div style="text-align:center;margin-top:20px;">
+                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:72px;line-height:1;letter-spacing:.01em;">762</div>
+                <div style="font-size:14px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.92;margin-top:4px;">days together</div>
+                <div style="font-size:12.5px;font-weight:600;opacity:.78;margin-top:8px;">Anu &amp; Aswin · since 21 May 2024</div>
+              </div>
+            </div>
+            <!-- white sheet -->
+            <div style="margin-top:0;background:#fff;border-radius:0;padding:24px 22px 0;position:relative;z-index:5;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <div style="font-size:19px;font-weight:800;">Your memories</div>
+                <div style="font-size:13px;color:#2D6FE0;font-weight:700;">See all</div>
+              </div>
+              <!-- big card 1 -->
+              <div style="position:relative;height:188px;border-radius:24px;overflow:hidden;margin-bottom:16px;box-shadow:0 12px 26px rgba(20,35,59,.12);">
+                <img src="assets/aswin.png" alt="" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(11,20,40,.82) 100%);"></div>
+                <div style="position:absolute;top:13px;left:13px;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#1B4FA8;background:rgba(255,255,255,.92);border-radius:999px;padding:5px 11px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1B4FA8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3.5s-2.5 0-4 1.5L13.5 8.5 5.3 6.7c-.5-.1-.9 0-1.2.3l-.9.9 5 2.7-2.5 2.5-2.5-.3-.8.8L7 18l3.3 2.5.8-.8-.3-2.5 2.5-2.5 2.7 5 .9-.9c.3-.3.4-.7.3-1.2Z"></path></svg>
+                  Trip
+                </div>
+                <div style="position:absolute;left:15px;right:15px;bottom:13px;color:#fff;">
+                  <div style="font-size:18px;font-weight:800;line-height:1.15;">Cherry blossoms in Leh</div>
+                  <div style="font-size:12px;font-weight:600;opacity:.85;margin-top:3px;">Apr 2025 · added by Aswin</div>
+                </div>
+              </div>
+              <!-- big card 2 -->
+              <div style="position:relative;height:188px;border-radius:24px;overflow:hidden;margin-bottom:16px;box-shadow:0 12px 26px rgba(20,35,59,.12);">
+                <img src="assets/anu.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center 28%;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(11,20,40,.82) 100%);"></div>
+                <div style="position:absolute;top:13px;left:13px;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#C2487A;background:rgba(255,255,255,.94);border-radius:999px;padding:5px 11px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C2487A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"></rect><circle cx="12" cy="13" r="3.2"></circle><path d="M8 6l1.5-2.2h5L16 6"></path></svg>
+                  Date night
+                </div>
+                <div style="position:absolute;left:15px;right:15px;bottom:13px;color:#fff;">
+                  <div style="font-size:18px;font-weight:800;line-height:1.15;">Dinner in the city</div>
+                  <div style="font-size:12px;font-weight:600;opacity:.85;margin-top:3px;">Mar 2025 · added by Aswin</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- bottom nav -->
+          <div style="position:absolute;left:0;right:0;bottom:0;height:76px;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-top:1px solid #EEF2F8;display:flex;align-items:center;justify-content:space-between;padding:0 46px;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="13" height="13" rx="2.5"></rect><rect x="3" y="8" width="13" height="13" rx="2.5" fill="#fff"></rect><circle cx="6.7" cy="11.6" r="1.1"></circle><path d="M3.4 19.5 6.8 16a1.4 1.4 0 0 1 1.9 0l2.9 2.6"></path></svg>
+              <span style="font-size:10.5px;font-weight:700;color:#2D6FE0;">Memories</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9AA7BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.2 6.4l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.7-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.5Z"></path></svg>
+              <span style="font-size:10.5px;font-weight:600;color:#9AA7BD;">Settings</span>
+            </div>
+          </div>
+          <div style="position:absolute;bottom:54px;left:50%;transform:translateX(-50%);width:60px;height:60px;border-radius:50%;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(45,111,224,.45);border:4px solid #fff;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- ---------- ALL MEMORIES (NEW) ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">All memories <span style="font-size:11px;font-weight:800;color:#fff;background:#1B8A5B;border-radius:999px;padding:2px 8px;vertical-align:middle;margin-left:4px;">new</span></div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="All memories" style="position:relative;height:100%;background:#fff;color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+          <div style="height:100%;overflow:auto;padding:0 0 40px;">
+            <!-- sticky header + filters -->
+            <div style="position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid #EEF2F8;">
+              <div style="display:flex;align-items:center;gap:14px;padding:14px 20px 6px;">
+                <div style="width:42px;height:42px;border-radius:14px;background:#F4F8FE;display:flex;align-items:center;justify-content:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14233B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:20px;font-weight:800;font-family:'Fredoka',sans-serif;line-height:1;">All memories</div>
+                  <div style="font-size:12px;color:#8693A8;font-weight:600;margin-top:2px;">23 moments · 2 years</div>
+                </div>
+                
+              </div>
+              <!-- filter chips: memory type only -->
+              <div style="display:flex;gap:8px;overflow:auto;padding:8px 20px 14px;">
+                <div style="flex:none;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);border-radius:999px;padding:8px 15px;box-shadow:0 5px 12px rgba(45,111,224,.3);">All</div>
+                <div style="flex:none;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:8px 15px;">❤️ First</div>
+                <div style="flex:none;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:8px 15px;">📷 Date night</div>
+                <div style="flex:none;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:8px 15px;">✈️ Trips</div>
+                <div style="flex:none;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:8px 15px;">🎁 Gift</div>
+                <div style="flex:none;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:8px 15px;">🌟 Special</div>
+              </div>
+            </div>
+            <!-- 2025 group -->
+            <div style="display:flex;align-items:center;gap:10px;padding:18px 50px 10px 22px;">
+              <div style="font-size:15px;font-weight:800;color:#14233B;">2025</div>
+              <div style="font-size:11px;font-weight:700;color:#9AA7BD;background:#F4F8FE;border-radius:999px;padding:2px 9px;">3</div>
+              <div style="flex:1;height:1px;background:#EEF2F8;"></div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:center;margin:0 50px 12px 20px;background:#fff;border:1px solid #EEF2F8;border-radius:22px;padding:11px;box-shadow:0 6px 16px rgba(20,35,59,.05);">
+              <img src="assets/aswin.png" alt="" style="width:66px;height:66px;border-radius:16px;object-fit:cover;flex:none;">
+              <div style="flex:1;min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:999px;padding:3px 9px;margin-bottom:6px;">✈️ Trip</div>
+                <div style="font-size:15px;font-weight:700;color:#14233B;line-height:1.2;">Cherry blossoms in Leh</div>
+                <div style="font-size:12px;color:#8693A8;font-weight:500;margin-top:3px;">18 Apr 2025 · by Aswin</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7D6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+            <div style="display:flex;gap:14px;align-items:center;margin:0 50px 12px 20px;background:#fff;border:1px solid #EEF2F8;border-radius:22px;padding:11px;box-shadow:0 6px 16px rgba(20,35,59,.05);">
+              <img src="assets/anu.png" alt="" style="width:66px;height:66px;border-radius:16px;object-fit:cover;flex:none;">
+              <div style="flex:1;min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#C2487A;background:#FCE9F0;border-radius:999px;padding:3px 9px;margin-bottom:6px;">📷 Date night</div>
+                <div style="font-size:15px;font-weight:700;color:#14233B;line-height:1.2;">Dinner in the city</div>
+                <div style="font-size:12px;color:#8693A8;font-weight:500;margin-top:3px;">2 Mar 2025 · by Aswin</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7D6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+            <div style="display:flex;gap:14px;align-items:center;margin:0 50px 12px 20px;background:#fff;border:1px solid #EEF2F8;border-radius:22px;padding:11px;box-shadow:0 6px 16px rgba(20,35,59,.05);">
+              <div style="width:66px;height:66px;border-radius:16px;flex:none;background:linear-gradient(150deg,#EAF1FC,#D6E4FA);display:flex;align-items:center;justify-content:center;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 9.2 8.6 2 9.2l5.5 4.7L5.8 21 12 17.3 18.2 21l-1.7-7.1L22 9.2l-7.2-.6L12 2Z"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#7A5AC2;background:#EFEAFB;border-radius:999px;padding:3px 9px;margin-bottom:6px;">🌟 Special</div>
+                <div style="font-size:15px;font-weight:700;color:#14233B;line-height:1.2;">Weekend in the hills</div>
+                <div style="font-size:12px;color:#8693A8;font-weight:500;margin-top:3px;">9 Feb 2025 · by Anu</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7D6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+            <!-- 2024 group -->
+            <div style="display:flex;align-items:center;gap:10px;padding:18px 50px 10px 22px;">
+              <div style="font-size:15px;font-weight:800;color:#14233B;">2024</div>
+              <div style="font-size:11px;font-weight:700;color:#9AA7BD;background:#F4F8FE;border-radius:999px;padding:2px 9px;">2</div>
+              <div style="flex:1;height:1px;background:#EEF2F8;"></div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:center;margin:0 50px 12px 20px;background:#fff;border:1px solid #EEF2F8;border-radius:22px;padding:11px;box-shadow:0 6px 16px rgba(20,35,59,.05);">
+              <div style="width:66px;height:66px;border-radius:16px;flex:none;background:linear-gradient(150deg,#FCE9F0,#F8D3E0);display:flex;align-items:center;justify-content:center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#FF7A93"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#C2487A;background:#FCE9F0;border-radius:999px;padding:3px 9px;margin-bottom:6px;">❤️ First</div>
+                <div style="font-size:15px;font-weight:700;color:#14233B;line-height:1.2;">Our very first date</div>
+                <div style="font-size:12px;color:#8693A8;font-weight:500;margin-top:3px;">21 May 2024 · by Anu</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7D6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+            <div style="display:flex;gap:14px;align-items:center;margin:0 50px 12px 20px;background:#fff;border:1px solid #EEF2F8;border-radius:22px;padding:11px;box-shadow:0 6px 16px rgba(20,35,59,.05);">
+              <div style="width:66px;height:66px;border-radius:16px;flex:none;background:linear-gradient(150deg,#EAF1FC,#D6E4FA);display:flex;align-items:center;justify-content:center;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"></path><path d="M3.5 7h17l-1.5-3.2a1.5 1.5 0 0 0-1.4-.9H6.4a1.5 1.5 0 0 0-1.4.9L3.5 7Z"></path><path d="M12 7v14"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#B5762A;background:#FBF0DF;border-radius:999px;padding:3px 9px;margin-bottom:6px;">🎁 Gift</div>
+                <div style="font-size:15px;font-weight:700;color:#14233B;line-height:1.2;">Surprise birthday</div>
+                <div style="font-size:12px;color:#8693A8;font-weight:500;margin-top:3px;">14 Aug 2024 · by Aswin</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7D6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+          </div>
+          <!-- date scrubber rail -->
+          <div style="position:absolute;right:5px;top:150px;bottom:22px;width:40px;z-index:30;display:flex;justify-content:flex-end;">
+            <div style="position:relative;width:30px;background:rgba(244,248,254,.92);backdrop-filter:blur(4px);border:1px solid #E8EEF7;border-radius:999px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:13px 0;">
+              <div style="font-size:9px;font-weight:800;color:#2D6FE0;">'25</div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#C7D6EE;"></div>
+              <div style="width:7px;height:7px;border-radius:50%;background:#2D6FE0;"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#C7D6EE;"></div>
+              <div style="font-size:9px;font-weight:800;color:#9AA7BD;">'24</div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#C7D6EE;"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#C7D6EE;"></div>
+            </div>
+            <div style="position:absolute;top:50px;right:21px;display:flex;align-items:center;gap:7px;">
+              <div style="background:linear-gradient(160deg,#2D6FE0,#1B4FA8);color:#fff;font-size:11px;font-weight:800;border-radius:11px;padding:6px 10px;box-shadow:0 6px 16px rgba(45,111,224,.4);white-space:nowrap;">Apr 2025</div>
+              <div style="width:18px;height:18px;border-radius:50%;background:#2D6FE0;border:3px solid #fff;box-shadow:0 3px 8px rgba(45,111,224,.5);"></div>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- ---------- MEMORY DETAIL ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">Memory detail</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="Detail" style="position:relative;height:100%;background:#fff;color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+          <div style="height:100%;overflow:auto;">
+            <!-- hero image -->
+            <div style="position:relative;height:340px;">
+              <img src="assets/anu.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center 26%;">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,20,40,.28) 0%,rgba(0,0,0,0) 30%);"></div>
+              <div style="position:absolute;top:16px;left:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.18);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14233B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+              </div>
+              <!-- three dot -->
+              <div style="position:absolute;top:16px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.18);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#14233B"><circle cx="12" cy="5" r="1.9"></circle><circle cx="12" cy="12" r="1.9"></circle><circle cx="12" cy="19" r="1.9"></circle></svg>
+              </div>
+              <!-- popover menu -->
+              <div style="position:absolute;top:64px;right:18px;width:168px;background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(20,35,59,.22);overflow:hidden;z-index:6;">
+                <div style="display:flex;align-items:center;gap:11px;padding:13px 16px;font-size:14.5px;font-weight:700;color:#14233B;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"></path></svg>
+                  Edit
+                </div>
+                <div style="height:1px;background:#EEF2F8;"></div>
+                <div style="display:flex;align-items:center;gap:11px;padding:13px 16px;font-size:14.5px;font-weight:700;color:#E0556F;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E0556F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4.5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2V6m2 0v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path></svg>
+                  Delete
+                </div>
+              </div>
+            </div>
+            <!-- content sheet -->
+            <div style="margin-top:-30px;background:#fff;border-radius:30px 30px 0 0;padding:26px 24px 40px;position:relative;">
+              <div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#C2487A;background:#FCE9F0;border-radius:999px;padding:6px 13px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C2487A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"></rect><circle cx="12" cy="13" r="3.2"></circle><path d="M8 6l1.5-2.2h5L16 6"></path></svg>
+                Date night
+              </div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:28px;line-height:1.15;margin-top:14px;">Dinner in the city</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+                <img src="assets/aswin.png" alt="Aswin" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+                <span style="font-size:13px;color:#6B7A93;font-weight:600;">Added by Aswin</span>
+                <span style="color:#C7D6EE;">·</span>
+                <span style="font-size:13px;color:#6B7A93;font-weight:600;">2 Mar 2025</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;margin-top:14px;font-size:13.5px;color:#2D6FE0;font-weight:700;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Bandra, Mumbai
+              </div>
+              <div style="height:1px;background:#EEF2F8;margin:20px 0;"></div>
+              <p style="font-size:15px;line-height:1.7;color:#37475F;margin:0;">She wore that red dress and the whole street seemed to slow down. We split too much dessert, missed our cab on purpose, and walked home talking about everything and nothing. Easily one of my favourite nights with her. 💙</p>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- ---------- NEW MEMORY ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">New memory</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="New memory" style="position:relative;height:100%;background:#fff;color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+          <div style="height:100%;overflow:auto;padding:0 0 96px;">
+            <!-- header -->
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 20px 8px;">
+              <div style="width:42px;height:42px;border-radius:14px;background:#F4F8FE;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14233B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+              </div>
+              <div style="font-size:21px;font-weight:800;font-family:'Fredoka',sans-serif;">New memory</div>
+            </div>
+            <!-- photos up to 5 -->
+            <div style="padding:14px 20px 0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;">
+                <div style="font-size:13px;font-weight:800;color:#14233B;">Photos <span style="font-weight:600;color:#9AA7BD;">· optional</span></div>
+                <div style="font-size:12px;font-weight:700;color:#9AA7BD;">2 of 5</div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <div style="flex:1;height:104px;border-radius:18px;overflow:hidden;position:relative;">
+                  <img src="assets/anu.png" alt="" style="width:100%;height:100%;object-fit:cover;">
+                  <div style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(11,20,40,.62);display:flex;align-items:center;justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                  </div>
+                </div>
+                <div style="flex:1;height:104px;border-radius:18px;overflow:hidden;position:relative;">
+                  <img src="assets/aswin.png" alt="" style="width:100%;height:100%;object-fit:cover;">
+                  <div style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(11,20,40,.62);display:flex;align-items:center;justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                  </div>
+                </div>
+                <div style="flex:1;height:104px;border-radius:18px;border:2px dashed #C7D6EE;background:#F8FAFE;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  <span style="font-size:11.5px;font-weight:700;color:#2D6FE0;">Add</span>
+                </div>
+              </div>
+            </div>
+            <!-- type -->
+            <div style="padding:22px 20px 0;">
+              <div style="font-size:13px;font-weight:800;color:#14233B;margin-bottom:11px;">Memory type</div>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);border-radius:999px;padding:9px 15px;box-shadow:0 6px 14px rgba(45,111,224,.3);">📷 Date night</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:9px 15px;">❤️ First</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:9px 15px;">✈️ Trip</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:9px 15px;">🎁 Gift</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#5B6B85;background:#F4F8FE;border:1px solid #E8EEF7;border-radius:999px;padding:9px 15px;">🌟 Special</div>
+              </div>
+            </div>
+            <!-- title field -->
+            <div style="padding:22px 20px 0;">
+              <div style="font-size:13px;font-weight:800;color:#14233B;margin-bottom:9px;">Title</div>
+              <div style="background:#F6F9FD;border:1.5px solid #2D6FE0;border-radius:16px;padding:14px 16px;font-size:15px;font-weight:600;color:#14233B;box-shadow:0 0 0 4px rgba(45,111,224,.1);">Dinner in the city</div>
+            </div>
+            <!-- date -->
+            <div style="padding:18px 20px 0;">
+              <div style="font-size:13px;font-weight:800;color:#14233B;margin-bottom:9px;">Date</div>
+              <div style="display:flex;align-items:center;gap:9px;background:#F6F9FD;border:1px solid #E8EEF7;border-radius:16px;padding:14px 14px;font-size:14.5px;font-weight:600;color:#14233B;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="3"></rect><path d="M3 9h18M8 2.5v4M16 2.5v4"></path></svg>
+                2 Mar 2025
+              </div>
+            </div>
+            <!-- location optional -->
+            <div style="padding:18px 20px 0;">
+              <div style="font-size:13px;font-weight:800;color:#14233B;margin-bottom:9px;">Location <span style="font-weight:600;color:#9AA7BD;">· optional</span></div>
+              <div style="display:flex;align-items:center;gap:9px;background:#F6F9FD;border:1px solid #E8EEF7;border-radius:16px;padding:14px 14px;font-size:14.5px;font-weight:600;color:#9AA7BD;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Add a place
+              </div>
+            </div>
+            <!-- note optional -->
+            <div style="padding:18px 20px 0;">
+              <div style="font-size:13px;font-weight:800;color:#14233B;margin-bottom:9px;">Note <span style="font-weight:600;color:#9AA7BD;">· optional</span></div>
+              <div style="background:#F6F9FD;border:1px solid #E8EEF7;border-radius:16px;padding:14px 16px;font-size:14.5px;font-weight:500;color:#9AA7BD;min-height:72px;">Tell the story of this moment…</div>
+            </div>
+          </div>
+          <!-- sticky save -->
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 20px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 30%);">
+            <div style="height:56px;border-radius:18px;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;font-size:16px;font-weight:800;box-shadow:0 12px 26px rgba(45,111,224,.4);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#fff"></path></svg>
+              Save memory
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <div style="flex:none;width:428px;">
+      <div style="font-size:14px;font-weight:800;color:#14233B;margin-bottom:16px;">Settings</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="412" height="892" hint-size="428px,908px">
+        <div data-screen-label="Settings" style="position:relative;height:100%;background:#fff;color:#14233B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+          <div style="height:100%;overflow:auto;padding:0 0 104px;">
+            <div style="font-size:24px;font-weight:800;font-family:'Fredoka',sans-serif;padding:20px 22px 4px;">Settings</div>
+            <!-- profile hero -->
+            <div style="margin:14px 22px 0;background:linear-gradient(160deg,#2D6FE0,#1B4FA8);border-radius:26px;padding:24px 22px;color:#fff;box-shadow:0 14px 30px rgba(45,111,224,.32);position:relative;overflow:hidden;">
+              <svg style="position:absolute;right:-10px;top:-10px;opacity:.16;" width="120" height="120" viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z"></path></svg>
+              <div style="display:flex;align-items:center;gap:14px;position:relative;">
+                <img src="assets/aswin.png" alt="Aswin" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.75);">
+                <div>
+                  <div style="font-size:20px;font-weight:800;">Aswin</div>
+                  <div style="font-size:12.5px;font-weight:600;opacity:.85;">with Anu · 762 days</div>
+                </div>
+              </div>
+            </div>
+            <!-- pair -->
+            <div style="margin:18px 22px 0;">
+              
+              <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #EEF2F8;border-radius:20px;padding:14px;box-shadow:0 5px 14px rgba(20,35,59,.05);">
+                <img src="assets/anu.png" alt="Anu" style="width:52px;height:52px;border-radius:50%;object-fit:cover;">
+                <div style="flex:1;">
+                  <div style="font-size:12.5px;color:#8693A8;font-weight:600;">Madly in love with</div>
+                  <div style="font-size:18px;font-weight:800;color:#14233B;line-height:1.15;">Anu</div>
+                </div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.4-7.5 10-7.5 10Z" fill="#FF7A93"></path></svg>
+              </div>
+            </div>
+            <!-- profile picture card -->
+            <div style="margin:18px 22px 0;">
+              <div style="font-size:12px;font-weight:800;color:#9AA7BD;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">Profile</div>
+              <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #EEF2F8;border-radius:20px;padding:13px;box-shadow:0 5px 14px rgba(20,35,59,.05);">
+                <div style="width:42px;height:42px;border-radius:13px;background:#EAF1FC;display:flex;align-items:center;justify-content:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"></rect><circle cx="8.5" cy="10" r="1.6"></circle><path d="m21 16-5-5L5 19"></path></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:15px;font-weight:700;">Profile picture</div>
+                  
+                </div>
+                <div style="font-size:13px;font-weight:700;color:#2D6FE0;background:#EAF1FC;border-radius:12px;padding:8px 14px;">Change</div>
+              </div>
+            </div>
+            <!-- lock button -->
+            <div style="margin:26px 22px 0;">
+              <div style="display:flex;align-items:center;justify-content:center;gap:9px;height:54px;border-radius:18px;border:1.5px solid #E8EEF7;background:#fff;font-size:15px;font-weight:800;color:#14233B;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14233B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="11" width="15" height="9" rx="2.5"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+                Lock app
+              </div>
+            </div>
+            <!-- footer -->
+            <div style="text-align:center;margin-top:34px;">
+              <div style="font-size:12.5px;color:#9AA7BD;font-weight:600;">Just us · v1.0.0</div>
+              <div style="font-size:13px;color:#6B7A93;font-weight:700;margin-top:4px;">A space that’s ours 💙</div>
+            </div>
+          </div>
+          <!-- bottom nav -->
+          <div style="position:absolute;left:0;right:0;bottom:0;height:76px;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-top:1px solid #EEF2F8;display:flex;align-items:center;justify-content:space-between;padding:0 46px;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9AA7BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="13" height="13" rx="2.5"></rect><rect x="3" y="8" width="13" height="13" rx="2.5" fill="#fff"></rect><circle cx="6.7" cy="11.6" r="1.1"></circle><path d="M3.4 19.5 6.8 16a1.4 1.4 0 0 1 1.9 0l2.9 2.6"></path></svg>
+              <span style="font-size:10.5px;font-weight:600;color:#9AA7BD;">Memories</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D6FE0" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.2 6.4l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.7-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.5Z"></path></svg>
+              <span style="font-size:10.5px;font-weight:700;color:#2D6FE0;">Settings</span>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

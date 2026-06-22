@@ -164,6 +164,22 @@
   object-fit: cover;
 }
 
+/* Default background when no image */
+.memory-card-default-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-hero);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.memory-card-default-emoji {
+  font-size: 52px;
+  opacity: 0.55;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+}
+
 .memory-gradient-overlay {
   position: absolute;
   inset: 0;
@@ -218,7 +234,7 @@
   margin-top: 3px;
 }
 
-/* Bottom navigation */
+/* Bottom navigation - 3-item layout */
 .bottom-nav-timeline {
   position: fixed;
   left: 0;
@@ -230,9 +246,10 @@
   border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 46px;
+  justify-content: space-around;
+  padding: 0 16px;
   z-index: 100;
+  overflow: visible;
 }
 
 .nav-item-timeline {
@@ -242,8 +259,9 @@
   gap: 3px;
   background: none;
   border: none;
-  padding: 0;
+  padding: 8px 16px;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-item-timeline svg {
@@ -273,10 +291,10 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* Floating action button */
-.fab-timeline {
-  position: fixed;
-  bottom: 54px;
+/* Center FAB - floats above the nav bar */
+.nav-fab {
+  position: absolute;
+  top: -28px;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
@@ -286,20 +304,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 8px 24px rgba(45, 111, 224, 0.5);
   border: 4px solid #fff;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
   z-index: 101;
-  transition: transform 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
-.fab-timeline:active {
-  transform: translateX(-50%) scale(0.95);
-}
-
-.fab-timeline svg {
-  width: 26px;
-  height: 26px;
+.nav-fab:active {
+  opacity: 0.85;
 }
 
 /* Empty State */

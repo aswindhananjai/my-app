@@ -125,8 +125,8 @@
   margin-bottom: 10px;
 }
 
-/* Activity Card */
-.activity-card {
+/* Activity Link Card */
+.activity-link-card {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -137,14 +137,15 @@
   box-shadow: 0 5px 14px rgba(20, 35, 59, 0.05);
   cursor: pointer;
   transition: all 0.2s;
+  margin: 0;
 }
 
-.activity-card:hover {
+.activity-link-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(20, 35, 59, 0.08);
 }
 
-.activity-card:active {
+.activity-link-card:active {
   transform: translateY(0);
 }
 

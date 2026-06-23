@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout, getCurrentUser, getUserData, updateUserProfilePicture } from '../utils/auth';
 import { uploadImage } from '../utils/cloudinary';
 import { supabase } from '../utils/supabase';
 import { getUnreadActivityCount } from '../utils/activities';
+import { getRandomThought } from '../utils/thoughts';
+import SurpriseCard from '../components/SurpriseCard';
 import BottomNav from '../components/BottomNav';
 import '../styles/Settings.css';
 
@@ -15,6 +17,12 @@ export default function Settings() {
   const [partnerPicture, setPartnerPicture] = useState(null);
   const [daysTogether, setDaysTogether] = useState(0);
   const [unreadActivityCount, setUnreadActivityCount] = useState(0);
+
+  // Surprise card state
+  const [showSurprise, setShowSurprise] = useState(false);
+  const [surpriseThought, setSurpriseThought] = useState(null);
+  const [tapCount, setTapCount] = useState(0);
+  const tapTimerRef = useRef(null);
 
   const partnerName = currentUser === 'Aswin' ? 'Anu' : 'Aswin';
 
@@ -68,6 +76,41 @@ export default function Settings() {
   const handleLogout = () => {
     logout();
     navigate('/lock');
+  };
+
+  const handlePartnerCardTap = async () => {
+    // Clear existing timer
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    const newTapCount = tapCount + 1;
+    setTapCount(newTapCount);
+
+    // Reset tap count after 2 seconds of inactivity
+    tapTimerRef.current = setTimeout(() => {
+      setTapCount(0);
+    }, 2000);
+
+    // On 5th tap, show surprise
+    if (newTapCount === 5) {
+      setTapCount(0);
+      clearTimeout(tapTimerRef.current);
+
+      // Fetch random thought
+      const thought = await getRandomThought(currentUser);
+      if (thought) {
+        setSurpriseThought(thought);
+        setShowSurprise(true);
+      } else {
+        alert('No thoughts available yet! Add some thoughts for your partner first.');
+      }
+    }
+  };
+
+  const handleCloseSurprise = () => {
+    setShowSurprise(false);
+    setSurpriseThought(null);
   };
 
   const handleProfilePictureUpload = async (event) => {
@@ -132,7 +175,7 @@ export default function Settings() {
         {/* Settings Content */}
         <div className="settings-content">
           {/* Partner Card */}
-          <div className="partner-card">
+          <div className="partner-card" onClick={handlePartnerCardTap}>
             <img src={partnerPicture} alt={partnerName} className="partner-avatar" />
             <div className="partner-info">
               <div className="partner-label">Madly in love with</div>
@@ -238,6 +281,14 @@ export default function Settings() {
           <span>Settings</span>
         </button>
       </div>
+
+      {/* Surprise Card Overlay */}
+      {showSurprise && surpriseThought && (
+        <SurpriseCard
+          thought={surpriseThought}
+          onClose={handleCloseSurprise}
+        />
+      )}
     </div>
   );
 }

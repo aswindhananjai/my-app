@@ -1,0 +1,215 @@
+/* Surprise Card - Overlay and Animations */
+
+/* Keyframe animations */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes flyIn {
+  0% {
+    transform: translateY(90px) scale(0.55);
+    opacity: 0;
+  }
+  65% {
+    transform: translateY(-10px) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes floatY {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* Overlay */
+.surprise-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 20, 40, 0.82);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.3s ease both;
+}
+
+/* Close button */
+.surprise-close-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.surprise-close-button:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Card container */
+.surprise-card-container {
+  perspective: 1200px;
+  width: 260px;
+  height: 340px;
+  cursor: pointer;
+  animation: flyIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Flip wrapper */
+.surprise-card-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.surprise-card-flip.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Card face base */
+.surprise-card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+}
+
+/* Front face (face down) */
+.surprise-card-front {
+  background: linear-gradient(160deg, #3B82F6 0%, #2563EB 50%, #1B4FA8 100%);
+  box-shadow: 0 28px 60px rgba(45, 111, 224, 0.55);
+  color: #fff;
+  gap: 16px;
+}
+
+.surprise-card-emoji {
+  font-size: 54px;
+  line-height: 1;
+  animation: floatY 3s ease-in-out infinite;
+}
+
+.surprise-card-title {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.surprise-card-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Back face (revealed) */
+.surprise-card-back {
+  background: #fff;
+  box-shadow: 0 28px 60px rgba(20, 35, 59, 0.3);
+  transform: rotateY(180deg);
+  gap: 14px;
+}
+
+.surprise-heart-icon {
+  flex-shrink: 0;
+}
+
+.surprise-card-message {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #14233B;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.surprise-card-author {
+  font-size: 15px;
+  font-weight: 800;
+  color: #FF7A93;
+  margin-top: 4px;
+}
+
+.surprise-card-hint {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #C7D6EE;
+}
+
+/* Manage thoughts button */
+.surprise-manage-button {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  padding: 11px 20px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.surprise-manage-button:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.surprise-manage-button:active {
+  transform: translateX(-50%) scale(0.97);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .surprise-card-container {
+    width: 280px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .surprise-manage-button {
+    bottom: 80px;
+  }
+}

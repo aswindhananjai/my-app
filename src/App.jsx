@@ -11,6 +11,7 @@ import AddMemory from './pages/AddMemory';
 import MemoryDetail from './pages/MemoryDetail';
 import AllMemories from './pages/AllMemories';
 import Activity from './pages/Activity';
+import ManageThoughts from './pages/ManageThoughts';
 
 function ProtectedRoute({ children }) {
   const [authenticated, setAuthenticated] = useState(null);
@@ -140,6 +141,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Activity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-thoughts"
+          element={
+            <ProtectedRoute>
+              <ManageThoughts />
             </ProtectedRoute>
           }
         />

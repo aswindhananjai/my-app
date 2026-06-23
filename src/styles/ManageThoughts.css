@@ -1,0 +1,394 @@
+/* Manage Thoughts Page - Matching All Memories Design */
+
+.manage-thoughts-page {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #14233B;
+}
+
+/* Header */
+.manage-thoughts-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid #EEF2F8;
+  flex: none;
+  background: #fff;
+}
+
+.manage-thoughts-header .back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #F4F8FE;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: #14233B;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
+}
+
+.manage-thoughts-header .back-btn:active {
+  background: #E8EEF7;
+}
+
+.header-info {
+  flex: 1;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: 'Fredoka', sans-serif;
+  line-height: 1;
+  margin: 0;
+}
+
+.header-subtitle {
+  font-size: 12px;
+  color: #8693A8;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Add thought section */
+.add-thought-section {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid #EEF2F8;
+  flex: none;
+  background: #fff;
+}
+
+.add-thought-textarea {
+  width: 100%;
+  background: #F6F9FD;
+  border: 1px solid #E8EEF7;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  color: #14233B;
+  resize: none;
+  outline: none;
+  min-height: 68px;
+  line-height: 1.5;
+  transition: all 0.2s;
+}
+
+.add-thought-textarea:focus {
+  border-color: #2D6FE0;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(45, 111, 224, 0.1);
+}
+
+.add-thought-textarea::placeholder {
+  color: #9AA7BD;
+}
+
+.add-thought-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.word-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9AA7BD;
+  transition: color 0.2s;
+}
+
+.word-count.error {
+  color: #E0556F;
+}
+
+.add-thought-button {
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #2D6FE0, #1B4FA8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(45, 111, 224, 0.35);
+  border: none;
+  padding: 0 20px;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.add-thought-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.add-thought-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 0 4px 12px rgba(45, 111, 224, 0.2);
+}
+
+/* Thoughts list */
+.thoughts-list-container {
+  flex: 1;
+  overflow: auto;
+  padding: 14px 20px;
+  background: #fff;
+}
+
+.thoughts-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #EEF2F8;
+  border-top-color: #2D6FE0;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.thoughts-list-header {
+  font-size: 12px;
+  font-weight: 800;
+  color: #9AA7BD;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #14233B;
+  margin-bottom: 6px;
+}
+
+.empty-subtext {
+  font-size: 13px;
+  color: #8693A8;
+  font-weight: 500;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* Thought item */
+.thought-item {
+  background: #F8FAFE;
+  border: 1px solid #EEF2F8;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.thought-item.editing {
+  background: #F8FAFE;
+  border: 1.5px solid #2D6FE0;
+  box-shadow: 0 0 0 3px rgba(45, 111, 224, 0.1);
+}
+
+.thought-message {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #37475F;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.thought-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.thought-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9AA7BD;
+  font-weight: 600;
+}
+
+.thought-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.thought-stat-divider {
+  color: #C7D6EE;
+}
+
+.thought-date {
+  font-size: 11px;
+  color: #C7D6EE;
+  font-weight: 600;
+}
+
+.thought-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.edit-thought-button,
+.delete-thought-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.edit-thought-button {
+  background: #EAF1FC;
+  color: #2D6FE0;
+}
+
+.edit-thought-button:active {
+  background: #D6E7F9;
+}
+
+.delete-thought-button {
+  background: #FCE9F0;
+  color: #E0556F;
+}
+
+.delete-thought-button:active {
+  background: #F9D5E0;
+}
+
+/* Edit mode */
+.edit-thought-textarea {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #E8EEF7;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  color: #14233B;
+  resize: none;
+  outline: none;
+  min-height: 90px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.edit-thought-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-thought-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancel-edit-button,
+.save-edit-button {
+  height: 40px;
+  border-radius: 12px;
+  padding: 0 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-edit-button {
+  background: #F4F8FE;
+  border: 1px solid #E8EEF7;
+  color: #6B7A93;
+}
+
+.cancel-edit-button:active {
+  background: #E8EEF7;
+}
+
+.save-edit-button {
+  background: linear-gradient(160deg, #2D6FE0, #1B4FA8);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(45, 111, 224, 0.3);
+}
+
+.save-edit-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.save-edit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .manage-thoughts-header {
+    padding: 12px 16px 12px;
+  }
+
+  .add-thought-section {
+    padding: 14px 16px 12px;
+  }
+
+  .thoughts-list-container {
+    padding: 12px 16px;
+  }
+
+  .add-thought-button {
+    font-size: 13px;
+    padding: 0 16px;
+  }
+}

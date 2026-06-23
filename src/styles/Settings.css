@@ -83,6 +83,13 @@
   border-radius: 20px;
   padding: 14px;
   box-shadow: 0 5px 14px rgba(20, 35, 59, 0.05);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.partner-card:active {
+  transform: scale(0.98);
 }
 
 .partner-avatar {

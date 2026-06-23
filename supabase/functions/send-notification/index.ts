@@ -10,12 +10,30 @@ interface NotificationPayload {
   data?: Record<string, string>;
 }
 
-// Helper to get OAuth2 access token from service account
+// Proper base64url encode (URL-safe, no padding) required for JWTs
+function base64urlEncode(input: string | Uint8Array): string {
+  let bytes: Uint8Array;
+  if (typeof input === 'string') {
+    bytes = new TextEncoder().encode(input);
+  } else {
+    bytes = input;
+  }
+  // Convert to regular base64
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const b64 = btoa(binary);
+  // Make it URL-safe
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+// Helper to get OAuth2 access token from service account using FCM v1
 async function getAccessToken(serviceAccount: any): Promise<string> {
-  const jwtHeader = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const header = base64urlEncode(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
 
   const now = Math.floor(Date.now() / 1000);
-  const jwtClaimSet = btoa(JSON.stringify({
+  const claims = base64urlEncode(JSON.stringify({
     iss: serviceAccount.client_email,
     scope: 'https://www.googleapis.com/auth/firebase.messaging',
     aud: 'https://oauth2.googleapis.com/token',
@@ -23,7 +41,7 @@ async function getAccessToken(serviceAccount: any): Promise<string> {
     iat: now,
   }));
 
-  const signatureInput = `${jwtHeader}.${jwtClaimSet}`;
+  const signingInput = `${header}.${claims}`;
 
   // Import private key
   const privateKey = await crypto.subtle.importKey(
@@ -35,13 +53,14 @@ async function getAccessToken(serviceAccount: any): Promise<string> {
   );
 
   // Sign the JWT
-  const signature = await crypto.subtle.sign(
+  const signatureBuffer = await crypto.subtle.sign(
     'RSASSA-PKCS1-v1_5',
     privateKey,
-    new TextEncoder().encode(signatureInput)
+    new TextEncoder().encode(signingInput)
   );
 
-  const jwt = `${signatureInput}.${btoa(String.fromCharCode(...new Uint8Array(signature)))}`;
+  const signature = base64urlEncode(new Uint8Array(signatureBuffer));
+  const jwt = `${signingInput}.${signature}`;
 
   // Exchange JWT for access token
   const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -50,7 +69,15 @@ async function getAccessToken(serviceAccount: any): Promise<string> {
     body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
   });
 
+  if (!tokenResponse.ok) {
+    const err = await tokenResponse.text();
+    throw new Error(`OAuth token exchange failed: ${err}`);
+  }
+
   const tokenData = await tokenResponse.json();
+  if (!tokenData.access_token) {
+    throw new Error(`No access_token in OAuth response: ${JSON.stringify(tokenData)}`);
+  }
   return tokenData.access_token;
 }
 
@@ -95,7 +122,7 @@ serve(async (req) => {
     if (!FIREBASE_SERVICE_ACCOUNT) {
       console.error('FIREBASE_SERVICE_ACCOUNT not configured');
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
+        JSON.stringify({ error: 'Server configuration error: FIREBASE_SERVICE_ACCOUNT missing' }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -127,8 +154,8 @@ serve(async (req) => {
             },
             webpush: {
               notification: {
-                icon: '/favicon.ico',
-                badge: '/favicon.ico',
+                icon: '/logo.png',
+                badge: '/logo.png',
               },
               fcm_options: {
                 link: 'https://just-us-seven-theta.vercel.app/',

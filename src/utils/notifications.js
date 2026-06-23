@@ -51,37 +51,27 @@ async function getFCMToken() {
   try {
     console.log('[FCM] Getting token with VAPID key:', VAPID_KEY.substring(0, 20) + '...');
 
-    // Register service worker if not already registered
+    // Register service worker — use default scope so FCM can control it properly
     let serviceWorkerRegistration;
     if ('serviceWorker' in navigator) {
-      console.log('[FCM] Checking for service worker...');
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      const existing = registrations.find(reg => reg.active?.scriptURL.includes('firebase-messaging'));
-
-      if (existing) {
-        console.log('[FCM] Using existing service worker');
-        serviceWorkerRegistration = existing;
-      } else {
-        console.log('[FCM] Registering new service worker...');
-        try {
-          serviceWorkerRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-            scope: '/firebase-cloud-messaging-push-scope'
-          });
-          console.log('[FCM] Service worker registered:', serviceWorkerRegistration);
-
-          // Wait for service worker to be ready
-          await navigator.serviceWorker.ready;
-          console.log('[FCM] Service worker ready');
-        } catch (swError) {
-          console.error('[FCM] Service worker registration failed:', swError);
-          throw swError;
-        }
+      console.log('[FCM] Registering / updating service worker...');
+      try {
+        // Always register with root scope (/) for FCM compatibility
+        serviceWorkerRegistration = await navigator.serviceWorker.register(
+          '/firebase-messaging-sw.js'
+        );
+        // Wait until the SW is active
+        await navigator.serviceWorker.ready;
+        console.log('[FCM] Service worker ready');
+      } catch (swError) {
+        console.error('[FCM] Service worker registration failed:', swError);
+        // Don't throw — let FCM try without an explicit SW registration
       }
     }
 
     const token = await getToken(messaging, {
       vapidKey: VAPID_KEY,
-      serviceWorkerRegistration
+      serviceWorkerRegistration,
     });
 
     if (token) {
@@ -89,23 +79,12 @@ async function getFCMToken() {
       await saveFCMToken(token);
       return token;
     } else {
-      console.log('[FCM] No registration token available');
+      console.log('[FCM] No registration token available. Make sure notifications are allowed in browser settings.');
       return null;
     }
   } catch (error) {
     console.error('[FCM] Error getting FCM token:', error);
     console.error('[FCM] Error details:', error.message, error.code);
-
-    // Provide helpful error messages for common issues
-    if (error.code === 'messaging/failed-service-worker-registration' || error.name === 'AbortError') {
-      console.error('[FCM] Service worker registration failed.');
-      console.error('[FCM] This can happen due to:');
-      console.error('[FCM]   1. SSL certificate issues on localhost');
-      console.error('[FCM]   2. Service worker file not accessible');
-      console.error('[FCM]   3. Browser blocking service workers');
-      console.error('[FCM] Try testing on the production Vercel deployment: https://just-us-seven-theta.vercel.app');
-    }
-
     return null;
   }
 }

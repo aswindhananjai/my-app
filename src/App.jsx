@@ -44,10 +44,7 @@ function AppContent() {
     if (isAuthenticated()) {
       // Setup foreground message listener
       const timer = setTimeout(() => {
-        // Only request permission for web browsers (not Android)
-        if (!window.Android) {
-          requestNotificationPermission();
-        }
+        requestNotificationPermission();
         setupForegroundMessageListener();
       }, 2000);
 

@@ -18,9 +18,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(45, 111, 224, 0.4);
+  background: var(--color-primary-dark);
+}
+
 .fab:active {
-  transform: scale(0.95);
-  box-shadow: var(--shadow-md);
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 8px 16px rgba(45, 111, 224, 0.3);
 }
 
 .fab svg {

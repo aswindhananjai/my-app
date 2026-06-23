@@ -13,9 +13,13 @@ const getCategoryIcon = (category) => {
     moment: '❤️',
     quote: '💭',
     celebration: '🎉',
-    special_day: '⭐'
+    special_day: '⭐',
+    date: '🌹'
   };
-  return icons[category] || '💖';
+  if (!category) return '💖';
+  const parts = category.split(',').filter(Boolean);
+  const primary = parts.find(p => p !== 'first') || parts[0] || 'first';
+  return icons[primary] || '💖';
 };
 
 /**

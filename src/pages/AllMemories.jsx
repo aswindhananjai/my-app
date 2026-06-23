@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
+import FloatingActionButton from '../components/FloatingActionButton';
 import '../styles/AllMemories.css';
 
 const MEMORY_CATEGORIES = [
@@ -45,6 +46,13 @@ const MEMORY_CATEGORIES = [
     icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
     color: '#B7791F',
     bg: '#FFF8E0'
+  },
+  {
+    id: 'date',
+    name: 'Date',
+    icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h7.3" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /><path d="M16 14l-2 2.4c-.4.4-.7.9-.7 1.4a2.5 2.5 0 0 0 5 0c0-.5-.3-1-.7-1.4L16 14Z" /></svg>,
+    color: '#E11D48',
+    bg: '#FFE4E6'
   }
 ];
 
@@ -272,7 +280,10 @@ export default function AllMemories() {
   const filteredMemories = filter === 'all'
     ? groupedMemories
     : Object.entries(groupedMemories).reduce((acc, [year, mems]) => {
-        const filtered = mems.filter(m => m.category === filter);
+        const filtered = mems.filter(m => {
+          const categories = m.category ? m.category.split(',').filter(Boolean) : ['first'];
+          return categories.includes(filter);
+        });
         if (filtered.length > 0) {
           acc[year] = filtered;
         }
@@ -287,6 +298,7 @@ export default function AllMemories() {
   const getCategoryStyle = (category) => {
     const cat = MEMORY_CATEGORIES.find(c => c.id === category);
     return cat || {
+      id: category,
       icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /></svg>,
       name: category,
       color: '#2D6FE0',
@@ -476,7 +488,9 @@ export default function AllMemories() {
                 </div>
 
                 {filteredMemories[year].map(memory => {
-                  const categoryStyle = getCategoryStyle(memory.category);
+                  const categoryIds = memory.category ? memory.category.split(',').filter(Boolean) : ['first'];
+                  const categories = categoryIds.map(id => getCategoryStyle(id));
+                  const displayCategory = categories.find(c => c.id !== 'first') || categories[0];
                   const memoryDate = new Date(memory.date);
                   const formattedDate = memoryDate.toLocaleDateString('en-US', {
                     day: 'numeric',
@@ -514,16 +528,20 @@ export default function AllMemories() {
                           className="memory-thumbnail"
                         />
                       ) : (
-                        <div className="memory-thumbnail-placeholder" style={{ background: categoryStyle.bg, color: categoryStyle.color }}>
+                        <div className="memory-thumbnail-placeholder" style={{ background: displayCategory.bg, color: displayCategory.color }}>
                           <span className="placeholder-icon">
-                            {categoryStyle.icon}
+                            {displayCategory.icon}
                           </span>
                         </div>
                       )}
                       <div className="memory-info">
-                        <div className="memory-category" style={{ color: categoryStyle.color, background: categoryStyle.bg }}>
-                          <span className="category-icon">{categoryStyle.icon}</span>
-                          <span>{categoryStyle.name}</span>
+                        <div className="memory-categories-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
+                          {categories.map(cat => (
+                            <div key={cat.id} className="memory-category" style={{ color: cat.color, background: cat.bg, marginBottom: 0 }}>
+                              <span className="category-icon">{cat.icon}</span>
+                              <span>{cat.name}</span>
+                            </div>
+                          ))}
                         </div>
                         <h3 className="memory-title">{memory.title}</h3>
                         <p className="memory-meta">
@@ -570,6 +588,7 @@ export default function AllMemories() {
           </div>
         </div>
       )}
+      <FloatingActionButton className="all-memories-fab" />
     </div>
   );
 }

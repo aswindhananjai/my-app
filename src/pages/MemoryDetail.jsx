@@ -60,6 +60,29 @@ export default function MemoryDetail() {
     }
   };
 
+  const handleDeleteVersion = async () => {
+    if (!window.confirm("Are you sure you want to delete your note?")) return;
+    setSavingVersion(true);
+    try {
+      const { error } = await supabase
+        .from('memories')
+        .update({
+          partner_description: null,
+          updated_by: currentUser,
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchMemory();
+      setShowVersionSheet(false);
+    } catch (error) {
+      console.error('Error deleting partner version:', error);
+      alert('Failed to delete your note');
+    } finally {
+      setSavingVersion(false);
+    }
+  };
+
   const handleScroll = (e) => {
     const scrollLeft = e.target.scrollLeft;
     const width = e.target.offsetWidth;
@@ -174,7 +197,8 @@ export default function MemoryDetail() {
 
   const imagesList = getImagesList();
   const hasImage = imagesList.length > 0;
-  const category = getCategoryInfo(memory.category);
+  const categoryIds = memory.category ? memory.category.split(',').filter(Boolean) : ['first'];
+  const categories = categoryIds.map(id => getCategoryInfo(id));
 
   const isCreator = currentUser === memory.created_by;
   const partnerName = memory.created_by === 'Aswin' ? 'Anu' : 'Aswin';
@@ -319,10 +343,14 @@ export default function MemoryDetail() {
 
       {/* Scrollable body */}
       <div className="detail-body">
-        {/* Category pill */}
-        <div className="detail-category" style={{ color: category.textColor, background: category.color }}>
-          <span className="category-icon">{category.icon}</span>
-          <span>{category.name}</span>
+        {/* Category pills */}
+        <div className="detail-categories-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '14px' }}>
+          {categories.map(cat => (
+            <div key={cat.id} className="detail-category" style={{ color: cat.textColor, background: cat.color, marginBottom: 0 }}>
+              <span className="category-icon">{cat.icon}</span>
+              <span>{cat.name}</span>
+            </div>
+          ))}
         </div>
 
         <h1 className="detail-title">{memory.title}</h1>
@@ -356,20 +384,11 @@ export default function MemoryDetail() {
 
         {/* Partner description */}
         {hasPartnerNote ? (
-          <div className="detail-partner-description">
-            <div className="partner-description-header">
-              <span className="partner-heading">Here is what {partnerName} has to say</span>
-              {!isCreator && (
-                <button className="partner-edit-btn" onClick={openVersionSheet}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                  <span>Edit</span>
-                </button>
-              )}
+          <div className="detail-partner-section">
+            <h3 className="partner-section-title">Here is what {partnerName} has to say</h3>
+            <div className="detail-partner-description-text">
+              <p>{memory.partner_description}</p>
             </div>
-            <p>{memory.partner_description}</p>
           </div>
         ) : (
           !isCreator && (
@@ -423,12 +442,27 @@ export default function MemoryDetail() {
           <div className="bottom-sheet" onClick={e => e.stopPropagation()}>
             <div className="bottom-sheet-header">
               <h3 className="bottom-sheet-title">{hasPartnerNote ? 'Edit your version' : 'Add your version'}</h3>
-              <button className="bottom-sheet-close" onClick={() => setShowVersionSheet(false)} disabled={savingVersion}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
+              <div className="bottom-sheet-header-actions">
+                {hasPartnerNote && (
+                  <button
+                    className="bottom-sheet-delete-btn"
+                    onClick={handleDeleteVersion}
+                    disabled={savingVersion}
+                    title="Delete note"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E0556F" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                )}
+                <button className="bottom-sheet-close" onClick={() => setShowVersionSheet(false)} disabled={savingVersion}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
             </div>
             <textarea
               className="bottom-sheet-textarea"

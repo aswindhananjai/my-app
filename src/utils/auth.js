@@ -5,6 +5,10 @@ const USERS_CACHE_KEY = 'justus_users_cache';
 const CACHE_EXPIRY_KEY = 'justus_users_cache_expiry';
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
+// On cold start / JS module load, reset authentication status to locked.
+// This ensures that refreshing the page or restarting the app always requires a passcode entry.
+localStorage.setItem('justus_authenticated', 'false');
+
 // Cache users in localStorage to avoid repeated DB calls
 const getCachedUsers = () => {
   const cached = localStorage.getItem(USERS_CACHE_KEY);

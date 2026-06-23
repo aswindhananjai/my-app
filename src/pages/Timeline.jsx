@@ -222,7 +222,9 @@ export default function Timeline() {
         ) : (
           <>
             {memories.slice(0, 5).map(memory => {
-              const category = getCategoryInfo(memory.category);
+              const categoryIds = memory.category ? memory.category.split(',').filter(Boolean) : ['first'];
+              const categories = categoryIds.map(id => getCategoryInfo(id));
+              const displayCategory = categories.find(c => c.id !== 'first') || categories[0];
               const previewUrl = getFirstImageUrl(memory.image_url);
               return (
                 <div
@@ -235,31 +237,35 @@ export default function Timeline() {
                     : (
                       <div
                         className="memory-card-default-bg"
-                        style={{ background: `linear-gradient(145deg, ${category.color} 0%, ${category.color}dd 100%)` }}
+                        style={{ background: `linear-gradient(145deg, ${displayCategory.color} 0%, ${displayCategory.color}dd 100%)` }}
                       >
                         {/* Scattered emoji pattern — evenly, widely distributed */}
-                        <span style={{ position:'absolute', fontSize:'54px', top:'-5%',    left:'-5%',    opacity:0.15, transform:'rotate(-12deg)', lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'28px', top:'12%',    left:'20%',    opacity:0.18, transform:'rotate(18deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'40px', top:'5%',     left:'48%',    opacity:0.12, transform:'rotate(-8deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'72px', top:'-10%',   right:'-5%',   opacity:0.14, transform:'rotate(22deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'32px', top:'42%',    left:'5%',     opacity:0.2,  transform:'rotate(-15deg)', lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'20px', top:'38%',    left:'30%',    opacity:0.16, transform:'rotate(10deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'36px', top:'45%',    left:'58%',    opacity:0.14, transform:'rotate(-20deg)', lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'48px', top:'35%',    right:'10%',   opacity:0.13, transform:'rotate(15deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'50px', bottom:'-8%',  left:'12%',    opacity:0.12, transform:'rotate(25deg)',  lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'24px', bottom:'15%', left:'26%',    opacity:0.18, transform:'rotate(-18deg)', lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'30px', bottom:'8%',  left:'45%',    opacity:0.15, transform:'rotate(8deg)',   lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'64px', bottom:'-12%', right:'15%',   opacity:0.11, transform:'rotate(-22deg)', lineHeight:1 }}>{category.emoji}</span>
-                        <span style={{ position:'absolute', fontSize:'22px', bottom:'22%', right:'2%',    opacity:0.2,  transform:'rotate(12deg)',  lineHeight:1 }}>{category.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'54px', top:'-5%',    left:'-5%',    opacity:0.15, transform:'rotate(-12deg)', lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'28px', top:'12%',    left:'20%',    opacity:0.18, transform:'rotate(18deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'40px', top:'5%',     left:'48%',    opacity:0.12, transform:'rotate(-8deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'72px', top:'-10%',   right:'-5%',   opacity:0.14, transform:'rotate(22deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'32px', top:'42%',    left:'5%',     opacity:0.2,  transform:'rotate(-15deg)', lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'20px', top:'38%',    left:'30%',    opacity:0.16, transform:'rotate(10deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'36px', top:'45%',    left:'58%',    opacity:0.14, transform:'rotate(-20deg)', lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'48px', top:'35%',    right:'10%',   opacity:0.13, transform:'rotate(15deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'50px', bottom:'-8%',  left:'12%',    opacity:0.12, transform:'rotate(25deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'24px', bottom:'15%', left:'26%',    opacity:0.18, transform:'rotate(-18deg)', lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'30px', bottom:'8%',  left:'45%',    opacity:0.15, transform:'rotate(8deg)',   lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'64px', bottom:'-12%', right:'15%',   opacity:0.11, transform:'rotate(-22deg)', lineHeight:1 }}>{displayCategory.emoji}</span>
+                        <span style={{ position:'absolute', fontSize:'22px', bottom:'22%', right:'2%',    opacity:0.2,  transform:'rotate(12deg)',  lineHeight:1 }}>{displayCategory.emoji}</span>
                       </div>
                     )
                   }
                   <div className="memory-gradient-overlay"></div>
-                  {/* Category badge — white background with colored text */}
-                  <span className="memory-category-badge" style={{ background: '#fff', color: category.textColor }}>
-                    <span className="badge-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0, color: category.textColor }}>{category.icon}</span>
-                    {category.name}
-                  </span>
+                  {/* Category badges — white background with colored text */}
+                  <div className="memory-category-badges-container">
+                    {categories.map(cat => (
+                      <span key={cat.id} className="memory-category-badge" style={{ background: '#fff', color: cat.textColor }}>
+                        <span className="badge-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0, color: cat.textColor }}>{cat.icon}</span>
+                        {cat.name}
+                      </span>
+                    ))}
+                  </div>
                   <div className="memory-card-content">
                     <div className="memory-card-title">{memory.title}</div>
                     <div className="memory-card-meta">

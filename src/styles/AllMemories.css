@@ -400,3 +400,8 @@
   background: var(--color-background-light, #F4F8FE);
   pointer-events: none; /* prevent the dragging card from blocking elementFromPoint queries */
 }
+
+/* Floating Action Button Position Adjustment for All Memories Page */
+.all-memories-fab {
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+}

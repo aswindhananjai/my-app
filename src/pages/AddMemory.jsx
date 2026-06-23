@@ -180,7 +180,31 @@ export default function AddMemory() {
   };
 
   const handleCategoryChange = (categoryId) => {
-    setFormData({ ...formData, category: categoryId });
+    const selected = formData.category ? formData.category.split(',').filter(Boolean) : [];
+    let next;
+    
+    if (selected.includes(categoryId)) {
+      if (selected.length > 1) {
+        next = selected.filter(id => id !== categoryId);
+      } else {
+        next = selected;
+      }
+    } else {
+      if (categoryId === 'first') {
+        if (selected.length < 2) {
+          next = [...selected, 'first'];
+        } else {
+          next = ['first'];
+        }
+      } else {
+        if (selected.includes('first')) {
+          next = ['first', categoryId];
+        } else {
+          next = [categoryId];
+        }
+      }
+    }
+    setFormData({ ...formData, category: next.join(',') });
   };
 
   const handleSubmit = async (e) => {
@@ -401,17 +425,20 @@ export default function AddMemory() {
           <div className="form-section">
             <div className="form-label">Memory type</div>
             <div className="category-pills">
-              {MEMORY_CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  className={`category-pill${formData.category === cat.id ? ' selected' : ''}`}
-                  onClick={() => handleCategoryChange(cat.id)}
-                >
-                  <span className="pill-icon">{cat.icon}</span>
-                  <span className="pill-label">{cat.name}</span>
-                </button>
-              ))}
+              {MEMORY_CATEGORIES.map((cat) => {
+                const isSelected = formData.category ? formData.category.split(',').includes(cat.id) : false;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    className={`category-pill${isSelected ? ' selected' : ''}`}
+                    onClick={() => handleCategoryChange(cat.id)}
+                  >
+                    <span className="pill-icon">{cat.icon}</span>
+                    <span className="pill-label">{cat.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -468,7 +495,7 @@ export default function AddMemory() {
           {/* Note (Creator's Version) */}
           <div className="form-section">
             <div className="form-label">
-              {isCreator ? 'Note' : `${otherPersonName}'s version`} <span className="label-optional">· optional</span>
+              Note <span className="label-optional">· optional</span>
             </div>
             <textarea
               name="description"

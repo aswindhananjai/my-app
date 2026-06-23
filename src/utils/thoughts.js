@@ -25,11 +25,12 @@ export async function getRandomThought(forUser) {
     // Get the partner's name (whose thoughts we want to show)
     const partnerName = forUser === 'Aswin' ? 'Anu' : 'Aswin';
 
-    // Fetch all thoughts created by the partner
+    // Fetch all active thoughts created by the partner
     const { data: thoughts, error } = await supabase
       .from('thoughts')
       .select('*')
       .eq('created_by', partnerName)
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -86,6 +87,7 @@ export async function getAllMyThoughts() {
       .from('thoughts')
       .select('*')
       .eq('created_by', currentUser)
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -176,13 +178,13 @@ export async function updateThought(id, message) {
 }
 
 /**
- * Delete a thought
+ * Soft delete a thought by setting is_active to false
  */
 export async function deleteThought(id) {
   try {
     const { error } = await supabase
       .from('thoughts')
-      .delete()
+      .update({ is_active: false })
       .eq('id', id);
 
     if (error) {

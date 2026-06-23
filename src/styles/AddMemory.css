@@ -73,6 +73,10 @@
   margin-bottom: 9px;
 }
 
+.form-label.label-error {
+  color: #E0556F !important;
+}
+
 .label-optional {
   font-weight: 600;
   color: var(--color-text-muted);

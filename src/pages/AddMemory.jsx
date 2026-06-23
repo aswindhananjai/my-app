@@ -30,14 +30,14 @@ export default function AddMemory() {
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
-    category: 'first',
+    category: '',
     title: '',
     date: new Date().toISOString().split('T')[0],
     description: '',
     location: '',
   });
-  const [errors, setErrors] = useState({ title: false, date: false });
-  const [shake, setShake] = useState({ title: false, date: false });
+  const [errors, setErrors] = useState({ title: false, date: false, category: false });
+  const [shake, setShake] = useState({ title: false, date: false, category: false });
 
   // Enable keyboard scroll adjustment
   useKeyboardScroll();
@@ -205,6 +205,9 @@ export default function AddMemory() {
       }
     }
     setFormData({ ...formData, category: next.join(',') });
+    if (errors.category) {
+      setErrors(prev => ({ ...prev, category: false }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -212,14 +215,15 @@ export default function AddMemory() {
 
     const hasTitleError = !formData.title.trim();
     const hasDateError = !formData.date;
+    const hasCategoryError = !formData.category;
 
-    if (hasTitleError || hasDateError) {
-      setErrors({ title: hasTitleError, date: hasDateError });
-      setShake({ title: hasTitleError, date: hasDateError });
+    if (hasTitleError || hasDateError || hasCategoryError) {
+      setErrors({ title: hasTitleError, date: hasDateError, category: hasCategoryError });
+      setShake({ title: hasTitleError, date: hasDateError, category: hasCategoryError });
       
       // Reset shake state after animation ends to allow subsequent shakings
       setTimeout(() => {
-        setShake({ title: false, date: false });
+        setShake({ title: false, date: false, category: false });
       }, 400);
       return;
     }
@@ -423,8 +427,8 @@ export default function AddMemory() {
 
           {/* Memory Type - Pills with labels, no flicker */}
           <div className="form-section">
-            <div className="form-label">Memory type</div>
-            <div className="category-pills">
+            <div className={`form-label ${errors.category ? 'label-error' : ''}`}>Memory type</div>
+            <div className={`category-pills ${shake.category ? 'shake-element' : ''}`}>
               {MEMORY_CATEGORIES.map((cat) => {
                 const isSelected = formData.category ? formData.category.split(',').includes(cat.id) : false;
                 return (

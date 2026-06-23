@@ -148,11 +148,11 @@
   transform: translateY(0);
 }
 
-.activity-icon {
+.settings-page .activity-icon {
   width: 42px;
   height: 42px;
   border-radius: 13px;
-  background: var(--color-background-light);
+  background: var(--color-background-light) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,11 +203,11 @@
   box-shadow: 0 5px 14px rgba(20, 35, 59, 0.05);
 }
 
-.profile-icon {
+.settings-page .profile-icon {
   width: 42px;
   height: 42px;
   border-radius: 13px;
-  background: var(--color-background-light);
+  background: var(--color-background-light) !important;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,238 +1,279 @@
+/* Activity Page - Matching All Memories Design */
 .activity-page {
+  position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 100%);
-  padding-bottom: 20px;
+  background: #fff;
+  color: #14233B;
 }
 
+/* Header */
 .activity-header {
   position: sticky;
   top: 0;
-  background: white;
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ffe4f0;
   z-index: 10;
-  box-shadow: 0 2px 8px rgba(255, 105, 180, 0.05);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #EEF2F8;
 }
 
-.activity-header h1 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #ff69b4;
-  margin: 0;
-  flex: 1;
-  text-align: center;
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px 6px;
 }
 
-.back-button {
-  background: none;
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #F4F8FE;
   border: none;
-  color: #ff69b4;
-  cursor: pointer;
-  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: #14233B;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
 }
 
-.back-button:hover {
-  background: #fff0f8;
+.back-btn:active {
+  background: #E8EEF7;
 }
 
-.back-button:active {
-  transform: scale(0.95);
+.header-info {
+  flex: 1;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: var(--font-family-display);
+  line-height: 1;
+  margin: 0;
+  color: #14233B;
+}
+
+.header-subtitle {
+  font-size: 12px;
+  color: #8693A8;
+  font-weight: 600;
+  margin: 2px 0 0;
+}
+
+.header-actions {
+  padding: 0 20px 14px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .mark-all-read-button {
-  background: none;
-  border: 1px solid #ff69b4;
-  color: #ff69b4;
-  padding: 8px 16px;
-  border-radius: 20px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
+  color: #2D6FE0;
+  background: #F4F8FE;
+  border: 1px solid #E8EEF7;
+  border-radius: 999px;
+  padding: 8px 16px;
   cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.mark-all-read-button:hover:not(:disabled) {
-  background: #ff69b4;
-  color: white;
+.mark-all-read-button:active:not(:disabled) {
+  background: #E8EEF7;
 }
 
 .mark-all-read-button:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* Content */
+.activity-content {
+  padding: 16px 0 40px;
+}
+
 .activity-loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: #ff69b4;
-  font-size: 16px;
-}
-
-.activity-list {
-  padding: 12px 16px;
-}
-
-.no-activities {
-  text-align: center;
-  padding: 80px 20px;
-  color: #999;
-}
-
-.no-activities-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  opacity: 0.5;
-}
-
-.no-activities p {
-  font-size: 16px;
-  margin: 0;
-}
-
-.activity-item {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(255, 105, 180, 0.08);
-  position: relative;
-}
-
-.activity-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(255, 105, 180, 0.15);
-}
-
-.activity-item:active {
-  transform: translateY(0);
-}
-
-.activity-item.unread {
-  background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
-  border: 1px solid #ffe4f0;
-}
-
-.activity-icon {
-  font-size: 28px;
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #fff0f8 0%, #ffe4f0 100%);
-  border-radius: 12px;
+  padding: 80px 20px;
 }
 
-.activity-content {
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #EEF2F8;
+  border-top-color: #2D6FE0;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #14233B;
+  margin-bottom: 6px;
+}
+
+.empty-subtext {
+  font-size: 13px;
+  color: #8693A8;
+  font-weight: 500;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* Activity Cards */
+.activity-card {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 0 20px 12px;
+  background: #fff;
+  border: 1px solid #EEF2F8;
+  border-radius: 22px;
+  padding: 11px;
+  box-shadow: 0 6px 16px rgba(20, 35, 59, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.activity-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 12px rgba(20, 35, 59, 0.08);
+}
+
+.activity-card.unread {
+  background: linear-gradient(135deg, #FFF9FC 0%, #FFFFFF 100%);
+  border-color: #FFE4F0;
+}
+
+.activity-thumbnail {
+  width: 66px;
+  height: 66px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.activity-thumbnail-placeholder {
+  width: 66px;
+  height: 66px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F4F8FE 0%, #EEF2F8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.placeholder-icon {
+  font-size: 28px;
+}
+
+.activity-info {
   flex: 1;
   min-width: 0;
+  padding-right: 8px;
 }
 
-.activity-text {
+.activity-title {
   font-size: 15px;
-  color: #333;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-
-.activity-memory-title {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 6px;
+  font-weight: 700;
+  color: #14233B;
+  margin-bottom: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.activity-action {
+  font-size: 13px;
+  color: #5B6B85;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
 .activity-time {
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: #9AA7BD;
+  font-weight: 600;
 }
 
-.unread-dot {
-  width: 10px;
-  height: 10px;
-  background: #ff69b4;
+.unread-indicator {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: #FF69B4;
   border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.15);
   flex-shrink: 0;
-  margin-top: 6px;
-  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
-  animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(255, 105, 180, 0.1);
-  }
+/* Load More */
+.load-more-container {
+  padding: 8px 20px 20px;
 }
 
 .load-more-button {
   width: 100%;
-  padding: 14px;
-  background: white;
-  border: 2px dashed #ffe4f0;
-  border-radius: 12px;
-  color: #ff69b4;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
+  color: #2D6FE0;
+  background: #F4F8FE;
+  border: 2px dashed #E8EEF7;
+  border-radius: 16px;
+  padding: 14px;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 8px;
-}
-
-.load-more-button:hover {
-  background: #fff5f7;
-  border-color: #ff69b4;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .load-more-button:active {
-  transform: scale(0.98);
+  background: #E8EEF7;
+  border-color: #2D6FE0;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .activity-header {
-    padding: 12px 16px;
+  .activity-card {
+    margin: 0 16px 10px;
   }
 
-  .activity-header h1 {
-    font-size: 20px;
+  .header-top {
+    padding: 12px 16px 6px;
   }
 
-  .mark-all-read-button {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .activity-list {
-    padding: 8px 12px;
-  }
-
-  .activity-item {
-    padding: 14px;
-  }
-
-  .activity-icon {
-    font-size: 24px;
-    width: 42px;
-    height: 42px;
+  .header-actions {
+    padding: 0 16px 12px;
   }
 }

@@ -20,9 +20,13 @@ const getCategoryIcon = (category) => {
 
 /**
  * Create an activity entry
+ * Automatically marks the activity as read for the person who triggered it
  */
-export async function createActivity(memoryId, actionType, actionBy, memoryTitle, memoryCategory) {
+export async function createActivity(memoryId, actionType, actionBy, memoryTitle, memoryCategory, memoryImageUrl = null) {
   try {
+    // Mark as read for the person who triggered the action
+    const readField = actionBy === 'Aswin' ? 'read_by_aswin' : 'read_by_anu';
+
     const { data, error } = await supabase
       .from('activities')
       .insert([{
@@ -30,7 +34,9 @@ export async function createActivity(memoryId, actionType, actionBy, memoryTitle
         action_type: actionType,
         action_by: actionBy,
         memory_title: memoryTitle,
-        memory_icon: getCategoryIcon(memoryCategory)
+        memory_icon: getCategoryIcon(memoryCategory),
+        memory_image_url: memoryImageUrl,
+        [readField]: true // Mark as read for the person who triggered it
       }])
       .select();
 
@@ -164,9 +170,9 @@ export function isActivityReadByCurrentUser(activity) {
  */
 export function getActivityActionText(activity) {
   const actions = {
-    created: 'created the memory',
-    updated: 'updated the memory',
-    deleted: 'removed the memory'
+    created: 'created a memory',
+    updated: 'updated a memory',
+    deleted: 'deleted a memory'
   };
-  return `${activity.action_by} ${actions[activity.action_type] || 'modified the memory'}`;
+  return `${activity.action_by} ${actions[activity.action_type] || 'modified a memory'}`;
 }

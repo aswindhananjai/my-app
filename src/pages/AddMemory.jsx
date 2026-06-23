@@ -246,7 +246,7 @@ export default function AddMemory() {
         if (error) throw error;
 
         // Create activity for memory update
-        await createActivity(id, 'updated', currentUser, formData.title, formData.category);
+        await createActivity(id, 'updated', currentUser, formData.title, formData.category, imageUrl);
       } else {
         // Insert new memory and return the created record to get the id
         const { data, error } = await supabase.from('memories').insert([{
@@ -264,7 +264,7 @@ export default function AddMemory() {
           }
 
           // Create activity for memory creation
-          await createActivity(data[0].id, 'created', currentUser, formData.title, formData.category);
+          await createActivity(data[0].id, 'created', currentUser, formData.title, formData.category, imageUrl);
 
           // Send notification to partner (only for new memories, not edits)
           try {

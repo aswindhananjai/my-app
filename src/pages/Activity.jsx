@@ -8,18 +8,21 @@ import {
   getActivityActionText,
   getUnreadActivityCount
 } from '../utils/activities.js';
+import { getCurrentUser } from '../utils/auth.js';
 import '../styles/Activity.css';
 
 const ACTIVITIES_PER_PAGE = 50;
 
 function Activity() {
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
   const [activities, setActivities] = useState([]);
   const [displayedActivities, setDisplayedActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [markingAllRead, setMarkingAllRead] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     loadActivities();
@@ -39,12 +42,17 @@ function Activity() {
     setActivities(data);
     setDisplayedActivities(data.slice(0, ACTIVITIES_PER_PAGE));
     setHasMore(data.length > ACTIVITIES_PER_PAGE);
+
+    // Count unread
+    const unread = data.filter(activity => !isActivityReadByCurrentUser(activity)).length;
+    setUnreadCount(unread);
+
     setLoading(false);
   }
 
   async function handleActivityClick(activity) {
-    // Mark as read for current user
-    if (!isActivityReadByCurrentUser(activity)) {
+    // Don't mark as read if user is the one who triggered it
+    if (activity.action_by !== currentUser && !isActivityReadByCurrentUser(activity)) {
       await markActivityAsRead(activity.id);
     }
 
@@ -92,19 +100,39 @@ function Activity() {
     }
   }
 
+  function getMemoryImage(activity) {
+    if (!activity.memory_image_url) return null;
+
+    try {
+      if (activity.memory_image_url.startsWith('[')) {
+        const urls = JSON.parse(activity.memory_image_url);
+        return urls[0] || null;
+      }
+      return activity.memory_image_url;
+    } catch (e) {
+      return activity.memory_image_url;
+    }
+  }
+
   if (loading) {
     return (
       <div className="activity-page">
         <div className="activity-header">
-          <button className="back-button" onClick={() => navigate('/settings')}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M19 12H5M12 19l-7-7 7-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <h1>Activity</h1>
-          <div style={{ width: '80px' }}></div>
+          <div className="header-top">
+            <button className="back-btn" onClick={() => navigate('/settings')}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <div className="header-info">
+              <h1 className="header-title">Activity</h1>
+              <div className="header-subtitle">Loading...</div>
+            </div>
+          </div>
         </div>
-        <div className="activity-loading">Loading activities...</div>
+        <div className="activity-loading">
+          <div className="spinner"></div>
+        </div>
       </div>
     );
   }
@@ -112,63 +140,87 @@ function Activity() {
   return (
     <div className="activity-page">
       <div className="activity-header">
-        <button className="back-button" onClick={() => navigate('/settings')}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M19 12H5M12 19l-7-7 7-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-        <h1>Activity</h1>
-        <button
-          className="mark-all-read-button"
-          onClick={handleMarkAllAsRead}
-          disabled={markingAllRead || activities.every(isActivityReadByCurrentUser)}
-        >
-          {markingAllRead ? '...' : 'Mark all read'}
-        </button>
+        <div className="header-top">
+          <button className="back-btn" onClick={() => navigate('/settings')}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <div className="header-info">
+            <h1 className="header-title">Activity</h1>
+            <div className="header-subtitle">
+              {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
+            </div>
+          </div>
+        </div>
+        {unreadCount > 0 && (
+          <div className="header-actions">
+            <button
+              className="mark-all-read-button"
+              onClick={handleMarkAllAsRead}
+              disabled={markingAllRead}
+            >
+              {markingAllRead ? 'Marking...' : 'Mark all read'}
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="activity-list">
+      <div className="activity-content">
         {displayedActivities.length === 0 ? (
-          <div className="no-activities">
-            <div className="no-activities-icon">📋</div>
-            <p>No activities yet</p>
+          <div className="empty-state">
+            <div className="empty-icon">📋</div>
+            <div className="empty-text">No activities yet</div>
+            <div className="empty-subtext">Activity will appear here when memories are created, updated, or deleted</div>
           </div>
         ) : (
           <>
             {displayedActivities.map((activity) => {
-              const isRead = isActivityReadByCurrentUser(activity);
+              const isRead = activity.action_by === currentUser || isActivityReadByCurrentUser(activity);
+              const imageUrl = getMemoryImage(activity);
+
               return (
                 <div
                   key={activity.id}
-                  className={`activity-item ${isRead ? 'read' : 'unread'}`}
+                  className={`activity-card ${isRead ? 'read' : 'unread'}`}
                   onClick={() => handleActivityClick(activity)}
                 >
-                  <div className="activity-icon">
-                    {activity.memory_icon || '💖'}
-                  </div>
-                  <div className="activity-content">
-                    <div className="activity-text">
-                      {getActivityActionText(activity)}
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={activity.memory_title}
+                      className="activity-thumbnail"
+                    />
+                  ) : (
+                    <div className="activity-thumbnail-placeholder">
+                      <span className="placeholder-icon">{activity.memory_icon || '💖'}</span>
                     </div>
-                    <div className="activity-memory-title">
-                      {activity.memory_title}
+                  )}
+
+                  <div className="activity-info">
+                    <div className="activity-title">{activity.memory_title}</div>
+                    <div className="activity-action">
+                      {getActivityActionText(activity)}
                     </div>
                     <div className="activity-time">
                       {formatRelativeTime(activity.created_at)}
                     </div>
                   </div>
-                  {!isRead && <div className="unread-dot"></div>}
+
+                  {!isRead && <div className="unread-indicator"></div>}
                 </div>
               );
             })}
 
             {hasMore && (
-              <button
-                className="load-more-button"
-                onClick={handleLoadMore}
-              >
-                Load More
-              </button>
+              <div className="load-more-container">
+                <button
+                  className="load-more-button"
+                  onClick={handleLoadMore}
+                >
+                  Load more activities
+                </button>
+              </div>
             )}
           </>
         )}

@@ -132,7 +132,7 @@ export default function MemoryDetail() {
     setDeleting(true);
     try {
       // Create activity for memory deletion before soft delete
-      await createActivity(id, 'deleted', currentUser, memory.title, memory.category);
+      await createActivity(id, 'deleted', currentUser, memory.title, memory.category, memory.image_url);
 
       // Soft delete: set is_active to false instead of deleting the record
       const { error } = await supabase
